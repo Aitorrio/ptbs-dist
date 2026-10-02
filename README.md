@@ -1,12 +1,14 @@
 <div align="center">
 
+<img src="Docs/screenshots/ptbs-header.svg" alt="PTBS" width="420"/>
+
 ### PTBS — Personal Tetra Base Station
 
 Estación base TETRA para Raspberry Pi. Se instala sola y se maneja desde el navegador.
 
 </div>
 
-**PTBS 0.5.1.** Mantenido por **Aitor, EA4HBL**.
+Mantenido por **Aitor, EA4HBL**.
 
 Hardware con el que se ha usado: LimeSDR Mini 2.0, SXceiver, Motorola MXP600, MTM800E y MTM5400.
 
@@ -57,8 +59,6 @@ curl -fsSL https://raw.githubusercontent.com/Aitorrio/ptbs-dist/beta/contrib/ins
 
 El estable sigue el release `latest-stable`. El beta sigue `latest-beta`. En una Pi nueva, el estable es el punto de partida.
 
-<!-- captura: instalador-en-marcha -->
-
 El script hace esto, en orden:
 
 1. Instala lo mínimo para arrancar (`curl`, herramientas SoapySDR y, si apt lo tiene, el módulo Lime). No instala Rust.
@@ -72,7 +72,6 @@ El script hace esto, en orden:
 
 Al terminar, la terminal imprime la dirección del panel.
 
-<!-- captura: instalador-url-final -->
 
 | | |
 |---|---|
@@ -82,6 +81,8 @@ Al terminar, la terminal imprime la dirección del panel.
 | Contraseña inicial | `1234` |
 | Configuración | `/etc/ptbs/config.toml` |
 | Reserva | `/etc/ptbs/config.toml.fallback` |
+
+![Instalación terminada: dirección del panel, usuario y servicio](Docs/screenshots/install.png)
 
 Si vuelves a lanzar el mismo instalador, **no pisa** la configuración ni la reserva. Sustituye el programa y el codec por los del canal.
 
@@ -99,7 +100,7 @@ Variables poco habituales (`PTBS_DASH_PORTS`, `PTBS_SKIP_TETRA_CODEC`, …) est�
 4. Arriba a la derecha están el **tema** (oscuro o claro) y el **idioma** (español o inglés). Sirven igual en el móvil.
 5. Cambia usuario y contraseña en cuanto puedas: **Sistema → Acceso al panel**.
 
-<!-- captura: pantalla-de-acceso -->
+![Acceso al panel](Docs/screenshots/login.png)
 
 Si el alta no está hecha, se abre el asistente. También puedes abrirlo luego en **Setup → Abrir asistente**.
 
@@ -128,7 +129,7 @@ La barra de la izquierda tiene tres bloques.
 
 Abajo del todo, dos pilotos: **BS** (la celda) y **BREW** (el enlace al core, si lo hay). Un aviso en la barra indica que el canal de actualización tiene una versión nueva.
 
-<!-- captura: barra-lateral -->
+![Barra lateral: monitor, estado del SDR y aviso de actualización](Docs/screenshots/menu.png)
 
 En el móvil la barra se abre con el menú. Los botones de tema, idioma y alimentación (reiniciar, suspender, apagar) están en la barra superior.
 
@@ -138,7 +139,7 @@ En el móvil la barra se abre con el menú. Los botones de tema, idioma y alimen
 
 El asistente deja el SDR elegido, la radio encendida y el servicio listo para volver tras un corte de luz. Puedes omitir pasos y volver más tarde.
 
-<!-- captura: asistente-bienvenida -->
+![Bienvenida del asistente](Docs/screenshots/wizard.png)
 
 ### 1. Bienvenida
 
@@ -181,7 +182,7 @@ Arriba, **Perfiles rápidos**: un desplegable **TMO Cell**, otro **Core Net (Bre
 
 Debajo, el recuento de radios registradas, las llamadas activas y el estado Brew. La tarjeta de la celda muestra TX, RX, dúplex, MCC, MNC, portadora y las ranuras de tiempo.
 
-<!-- captura: inicio -->
+![Inicio: perfiles rápidos, radios, llamadas y la celda en el aire](Docs/screenshots/inicio.png)
 
 La tabla **Radios registrados** lista cada ISSI (y el indicativo, si se conoce), grupos, ahorro de energía, señal y antigüedad. Desde la fila puedes **expulsar** un terminal o enviarle un **SDS**.
 
@@ -202,7 +203,7 @@ Hay dos familias, y se aplican **en pareja**:
 
 **Offline (sin Brew)** y **Despacho LST** vienen de serie y no se pueden borrar.
 
-<!-- captura: config-perfiles -->
+![Perfiles de TMO: celda y red Brew, con exportar e importar](Docs/screenshots/perfiles.png)
 
 ### Crear o editar
 
@@ -214,9 +215,9 @@ Hay dos familias, y se aplican **en pareja**:
 6. **Guardar como** duplica la ficha con otro nombre.
 7. Cuando la pareja sea la que quieres emitir, **Aplicar y reiniciar**. La estación hace una copia del `config.toml` actual, carga esa pareja y reinicia. Las llamadas en curso se cortan un momento.
 
-<!-- captura: ficha-perfil-celda -->
-
 La misma pareja se puede aplicar desde **Inicio → Perfiles rápidos**.
+
+![Ficha de una celda: frecuencias, colour code y el resto de la identidad](Docs/screenshots/perfil-tmo.png)
 
 ### Qué va en la celda
 
@@ -233,6 +234,8 @@ Colour code (0–63), MCC, MNC y área de localización tienen que ser los de tu
 - **Despacho LST:** no apunta a un servidor. Activa la consola del navegador. Hay que aplicarlo y reiniciar para que **Despacho LST** deje de decir que la consola no está disponible.
 
 Opciones del enlace, cuando hay core: reenvío de SDS, exportación de RSSI (más tráfico; déjala apagada si no la necesitas) y reenvío de posiciones LIP hacia un ISSI del core.
+
+![Ficha de un core Brew: host, puerto, TLS y usuario](Docs/screenshots/perfil-brew.png)
 
 ### Lista blanca, dentro del perfil
 
@@ -308,7 +311,7 @@ Si el perfil no está aplicado, la página lo dice y ofrece **Ir a Configuració
 
 **Tomar despacho** reserva la consola para este navegador y, a la vez, pide permiso de micrófono y altavoz. Hay que hacerlo con un clic: el navegador no abre el audio solo. Si otra persona ya lo tiene, verás «Despacho en uso por…». **Cerrar despacho** lo suelta.
 
-<!-- captura: despacho-consola -->
+![Consola de despacho: ISSI, lista de grupos, PTT, SDS y radios en línea](Docs/screenshots/despacho.png)
 
 Indica el **ISSI despachador** (el número con el que la consola existe en la celda) y pulsa **Aplicar**. Las radios verán ese ISSI como origen de tu voz y de tus SDS.
 
@@ -403,7 +406,13 @@ Esas tres acciones también están en el menú de alimentación de la barra supe
 
 La estación descarga el programa y `libtetra-codec.so` de ese canal, comprueba el SHA-256, los instala y reinicia. No compila nada en la Pi. Deja la ventana abierta hasta que la página vuelva. Perder el contacto unos segundos durante el reinicio es normal.
 
-<!-- captura: ota -->
+![Paso 1: elegir el canal](Docs/screenshots/ota-canal.png)
+
+![Paso 2: novedades del release](Docs/screenshots/ota-novedades.png)
+
+![Paso 3: la instalación en curso](Docs/screenshots/ota-progreso.png)
+
+![La estación reinicia con el programa nuevo y la página vuelve sola](Docs/screenshots/ota-aplicando.png)
 
 ### Acceso al panel
 

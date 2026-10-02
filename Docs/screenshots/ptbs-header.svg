@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="200" viewBox="0 0 720 200" role="img" aria-label="PTBS">
+  <title>PTBS</title>
+  <rect width="720" height="200" rx="16" fill="#0c121c"/>
+  <g transform="translate(168 60)">
+    <rect width="80" height="80" rx="18" fill="#141c2b" stroke="#00d4a8" stroke-opacity="0.35" stroke-width="1.5"/>
+    <g transform="translate(8 8) scale(2)">
+      <g stroke="#4da6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path d="M7 12.5V8h4.5"/>
+        <path d="M25 12.5V8h-4.5"/>
+        <path d="M7 19.5V24h4.5"/>
+        <path d="M25 19.5V24h-4.5"/>
+      </g>
+      <path d="M16 10.2 22 16 16 21.8 10 16Z" fill="none" stroke="#00d4a8" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="16" cy="16" r="1.7" fill="#00d4a8"/>
+    </g>
+  </g>
+  <text x="272" y="108" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="52" font-weight="700" fill="#f4f7fb" letter-spacing="1">PTBS</text>
+  <text x="274" y="140" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="600" fill="#8aa0bf" letter-spacing="2.4">PERSONAL TETRA BASE STATION</text>
+  <rect x="274" y="156" width="36" height="3" rx="1.5" fill="#00d4a8"/>
+</svg>
