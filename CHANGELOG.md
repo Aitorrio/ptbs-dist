@@ -1,0 +1,422 @@
+# Changelog — PTBS
+
+Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
+
+## v0.5.1 — Cuenta auxiliar `ptbs`
+
+La cuenta que crea el instalador para el helper del asistente se llama `ptbs`, igual que el producto. Si ya existe (por ejemplo en Raspberry Pi Imager), se reutiliza. El servicio sigue arrancando como root.
+
+- Instalación y OTA salen del repo público `Aitorrio/ptbs-dist` (`latest-stable` / `latest-beta`).
+
+## v0.5.0 — PTBS (Personal Tetra Base Station)
+
+Corte de instalación. Una estación 0.4.7 no se actualiza por OTA: se instala PTBS limpio y, si hace falta, se importa un `.bptbs`.
+
+- Producto **PTBS**, binario `/usr/local/bin/ptbs`, unit `ptbs.service`, checkout opcional `/opt/ptbs`.
+- OTA descarga el asset del release `latest-stable` (canal stable / rama `main`) o `latest-beta` (canal beta), comprueba SHA-256 e instala. Si la descarga falla, no se compila en la Pi.
+- `install-ptbs.sh` instala el binario sin Rust. Rust queda en el perfil `PTBS_DEV=1`.
+- UI: idiomas **es** / **en**, temas oscuro y claro, preferencias de tema e idioma en el mismo menú en PC y móvil.
+- El import `.bptbs` acepta copias 0.4.7 (`format` / `format_version`; el nombre de producto no se exige).
+- El binario publicado no lleva `--features asterisk`. La voz del despacho carga `libtetra-codec.so` del mismo release (`/usr/local/lib`), sin compilar en la Pi.
+- Canal **beta** sigue el release `latest-beta` (rama `beta`). Canal **stable** sigue `latest-stable` (rama `main`).
+
+## v0.4.7 — Copia de estación (.bptbs) y pack de perfiles (.ptbs)
+
+Respaldar o clonar una estación sin copiar a mano `/etc/ptbs`, y compartir solo perfiles Cell/Brew entre Pis.
+
+- **Sistema → Copia de seguridad**: exportar/importar `.bptbs` (config viva, perfiles, setup/fallback, TOMLs hermanos, Wi-Fi SSID+PSK). Al importar se conserva el canal OTA local, se limpia `source_dir` inválido, se fusionan redes Wi-Fi por SSID y se reinicia.
+- **Config → perfiles TMO**: exportar/importar `.ptbs` (solo árbol de perfiles). Sin reinicio automático — usa Aplicar y reiniciar para ponerlos al aire.
+- APIs autenticadas `GET/POST /api/station|profiles/export|import` (ZIP, hasta 32 MiB en estación).
+- Promovido a canal **stable** (`main`); `beta` al mismo tip.
+
+## v0.4.6 — LST: RX verde / double-PTT solo con tráfico real
+
+LED RX y oferta de interrupción (doble PTT) solo cuando otro interlocutor tiene el suelo vivo en el TG TX. Late-entry en hangtime ya no pinta verde ni deja el TG “pillado”.
+
+- `OngoingGroupCall` con `tx_active=false`: ignorado (sin `rx` / sin LED).
+- `CallEnded`: limpia RX de inmediato.
+- Fin de PTT propio (`NetworkCallEnd`): limpia RX/preempt del TG TX.
+- Promovido a canal **stable** (`main`); `beta` al mismo tip.
+
+## v0.4.5 — LST: sin double-PTT tras cambio de TG en hangtime
+
+Si un MS entra por late-entry durante hangtime (`tx_active=false`), el despacho armaba RX “verde” que `tx_gssi_busy` trataba como suelo ocupado; al liberar la llamada Network no llegaba `CallEnded` a LST → primer PTT denied / hace falta preempt.
+
+- Hangtime late-entry: LED verde con `floor_live=false` (no bloquea PTT).
+- `release_group_call` notifica siempre `CallEnded` a Brew/LST (`IfGroupRoutable`).
+- `CallEnded` limpia RX hangtime-only.
+
+## v0.4.4 — Puertos del dashboard: presets y binds estables
+
+Elección de puertos sin pelear con nginx/apache ni spamear ERROR en el log.
+
+- Instalador (SSH/TTY): pregunta **Estándar (80→443)** o **Puerto alto (solo HTTPS 8443)**; `PTBS_DASH_PORTS=standard|high` sin TTY. Configs existentes no se tocan.
+- Sistema → Acceso al panel: selector de preset + Apply & Restart (nueva URL tras reinicio).
+- `port = 0` desactiva el redirect HTTP. Migración OTA solo si `port = 8080` sin `https_port`.
+- Listeners legacy 8080/8443 solo en layout :443, fail-soft (sin reintentos infinitos). Bind canónico: conflicto → hint + retry 60s.
+- Validado en campo. Promovido a canal **stable** (`main`); `beta` al mismo tip.
+
+## v0.4.3 — LST SDS: ocultar ACK de entrega en el log
+
+- Los SDS-TL SHORT REPORT (confirmación de entrega del MS) ya no se registran en el log/inbox SDS.
+- Evita la fila fantasma `[text]` justo después de un SDS enviado desde el despacho.
+- Validado en campo (MS↔despacho privado/grupo, origen `operator_issi`). Promovido a canal **stable** (`main`); `beta` al mismo tip.
+
+## v0.4.2 — LST SDS: identidad despachador y ACK
+
+SDS de despacho LST deja de fingir entrega a 9999 y usa la ISSI del operador.
+
+- Con LST activo, SDS del roster/panel salen con `source_issi = operator_issi` (no 9999).
+- SDS entrantes al `operator_issi` se absorben con SDS-TL SHORT REPORT (el walkie deja de marcar error de envío).
+- Se elimina la absorción ciega de SDS-DATA a 9999: ruta estándar (local / Brew / undeliverable). WX y U-STATUS a 9999 sin cambios.
+- Inbox LST: solo privados destinados al despachador (sin filtro dual 9999).
+
+## v0.4.1 — Brew WiFi: leave mid-QSO como Ethernet
+
+Misma lógica Ethernet/WiFi; con latencia WiFi el MS podía seguir como owner Local mientras Brew hablaba, y rojo/cambio de TG tumbaba el circuito (media huérfana + U-SETUP encima).
+
+- Al preempt de Brew, ownership Local→Network.
+- U-DISCONNECT del owner solo soft-leave si Brew tiene el suelo (D-RELEASE personal; grupo vivo).
+- Sin listeners + Brew activo → Hold / LATE ENTRY (también si origin aún Local).
+- Release Local con brew_uuid → NetworkCallEnd antes de cerrar circuito (anti-zombie DL).
+- Owner con suelo local: teardown ETSI sin cambios.
+- Validado en campo (WiFi Hold → LATE ENTRY). Promovido a canal **stable** (`main`); `beta` al mismo tip.
+
+## v0.4.0 — Red host, Dual Carrier GUI y canal estable
+
+Salto menor de serie (aún sin rebrand a PTBS): nuevas capacidades de red en la GUI y consolidación de lo validado en beta.
+
+### Página Red (antes WiFi)
+
+- Menú **Red** con icono híbrido Ethernet+WiFi (superpuestos, estilo LST).
+- Sección **Enlaces**: interfaces ethernet/wifi con IP(s) y badge de **ruta por defecto**.
+- Gestión de perfiles **Ethernet** (conectar / desconectar) vía NetworkManager.
+- WiFi (conexión actual, redes guardadas, disponibles) en **una sola tarjeta** con separadores.
+- Estados NM y perfil «Wired connection» traducidos al idioma de la GUI.
+- API `/api/network/*` (overview + ethernet); `/api/wifi/*` sin cambios.
+
+### U-STATUS (walkie → ISSI 9999)
+
+- `ip` / `info` listan **todas** las IPs de host (`eth0=…*`, `wlan0=…`; `*` = ruta por defecto).
+- Respuesta **multilínea** (CR/LF admitidos en SDS de texto).
+- Enumeración rápida con `getifaddrs` (sin `nmcli` en el hilo de radio — evita caída del stack).
+
+### Dual Carrier (TMO Cell)
+
+- Configuración Dual Carrier en GUI (Config → Advanced RF), límite al passband de Fs.
+- Home / BTS Details: estado Activo/Apagado, mini-tiles secondary, orden MCCH/BCCH.
+
+### Repo / OTA
+
+- Eliminado el workflow de sync con upstream PTBS (force-push a `main`).
+- Promovido a canal **stable** (`main`); `beta` al mismo tip.
+
+## v0.3.47 — U-STATUS IP multilínea
+
+- El SDS de texto admite CR/LF (antes se filtraban).
+- Status IP: `Host IP` y cada interfaz en su línea (`eth0=…*`, `wlan0=…`).
+- Página Red + fixes U-STATUS IP (v0.3.44–0.3.47) promovidos a canal **stable** (`main`).
+
+## v0.3.46 — Fix: U-STATUS IP no bloquea el stack
+
+- El Status/info de IP ya no llama a `nmcli` en el hilo de radio (provocaba «Too late to produce TX block» y caída del stack).
+- Lista IPs con `getifaddrs` + `primary_ip()` (rápido, como el Status de temperatura).
+
+## v0.3.45 — Red: icono, i18n NM y WiFi unificado
+
+- Icono de menú Red: jack Ethernet y arcos WiFi superpuestos (estilo LST), arcos más anchos.
+- Sección de página «Red» (antes «Integraciones»); WiFi en una sola tarjeta con separadores.
+- Estados NM (`connected`, …) y perfil «Wired connection» traducidos al idioma de la GUI.
+
+## v0.3.44 — Página Red: Ethernet + WiFi
+
+- La pestaña **WiFi** pasa a llamarse **Red** (icono híbrido Ethernet+WiFi).
+- Nueva sección **Enlaces**: todas las interfaces ethernet/wifi con IP y badge de **ruta por defecto**.
+- Gestión de perfiles **Ethernet** (conectar / desconectar) vía NetworkManager.
+- El bloque WiFi (conexión, guardadas, escaneo) se mantiene debajo.
+- U-STATUS `ip` / `info` listan las IPs por interfaz (`eth0=…* wlan0=…`; `*` = ruta por defecto).
+
+## v0.3.43 — Dual Carrier: bordes de mini-tiles + promoción estable
+
+- Marcos de Carrier / TX / RX / Duplex dentro de Dual Carrier un poco más oscuros (mejor contraste).
+- Dual Carrier GUI (v0.3.38–0.3.43) promovido a canal **stable** (`main`).
+
+## v0.3.42 — Dual Carrier: mismo fondo que el resto
+
+- La tarjeta Dual Carrier usa el mismo fondo plano (tema light) que Registration Access / tiles BTS.
+
+## v0.3.41 — Dual Carrier: una sola tarjeta
+
+- Carrier / TX / RX / shift del secondary van **dentro** de la tarjeta Dual Carrier (sin caja aparte).
+- Estado: **Activo** (verde negrita) / **Apagado** (naranja negrita); se quita el texto «carrier secundario #…».
+
+## v0.3.40 — Dual Carrier UI: orden TS + mini-tiles
+
+- En BTS Details, la fila **MCCH (main)** va arriba y el **BCCH secondary** debajo.
+- Las mini-tiles del secondary (carrier, TX, RX, shift) aparecen **bajo Dual Carrier** cuando está activo (Home ya las rellena).
+
+## v0.3.39 — Fix OTA: encoding en server.rs
+
+- Corrige literales UTF-8 corruptos en el detector de mojibake del dashboard que impedían compilar `tetra-entities` en OTA (v0.3.38).
+
+## v0.3.38 — Dual Carrier en TMO Cell (GUI)
+
+- Dual Carrier se configura en **Config → Advanced RF** (checkbox bajo Main carrier; el secondary solo aparece si está ON).
+- El secondary se **limita al passband** de la Fs real del SDR (o 600 kHz por defecto); al activar se guardan Fs + centros midway en TOML y perfil Cell.
+- En **TETRA BTS Details**: botón «Configurar…» (sin switch) y **mini-tiles** del secondary (nº, TX, RX, shift) cuando está activo.
+
+## v0.3.37 — Overflow mid-report → D-ATTACH inmediato
+
+- Si el U-ATTACH trae *group report not complete* y >12 GSSI (MXP600), tras el ACK de 12 se afilia el resto con **D-ATTACH SwMI** en el acto (no se pide otro group report).
+- Si el amendment siguiente llega truncado (`BufferEnded` al parsear), se usa el resto guardado del PDU anterior para el mismo D-ATTACH.
+
+## v0.3.36 — Fallback SwMI attach si el MS no multipasa
+
+- Tras group report (§16.8.3), si el MXP600 vuelve a mandar >12 GSSI en un solo U-ATTACH (no hace amendment multipaso), la BTS afilia el resto y envía **D-ATTACH amend** SwMI (§16.8.1) con esos GSSI. IOP puede ignorarlo; si sigue en 12, limitar scan a ≤12.
+
+## v0.3.35 — Afiliación multipaso ETSI (§16.8.3)
+
+- Si un U-ATTACH trae más de **12** GSSI (p. ej. scan list MXP600), tras el ACK de los 12 la BTS pide **group report** SwMI (EN 300 392-2 §16.8.3) para que el MS re-afilie en varios mensajes (detach-all + amendments).
+- Log corregido: ya no dice que el MS reintentará solo. Validar en aire: scan >12 → más de 12 en «Grupos afiliados». Si el MS no multipasa tras el report, limitar scan a ≤12.
+
+## v0.3.34 — Restart recovery en Config
+
+- Interruptor **Restart recovery (proactive)** en Advanced network/timers (config en vivo + perfil TMO Cell), con ayuda «?». Default **off**. Tras Aplicar y reiniciar con el check activo, la BTS re-registra ISSIs cacheados sin tocar el walkie. La recuperación reactiva (al PTT/TG) sigue ON en el motor.
+
+## v0.3.33 — Pending-tail quiet 400 ms
+
+- Ajuste fino: quiet post-drenado Brew **400 ms** (antes 550) tras `GROUP_IDLE`.
+
+## v0.3.32 — Brew: no cortar la última sílaba al soltar PTT remoto
+
+- Tras `GROUP_IDLE` se **aplaza siempre** el `NetworkCallEnd` (aunque el jitter Brew esté vacío) para que UMAC termine de radiar los últimos TCH.
+- Quiet post-drenado ~**400 ms** (ajustado en 0.3.33; era 550 / antes 150); evita que el hangtime “se trague” la cola y la suelte al abrir el siguiente PTT.
+
+## v0.3.31 — Brew late entry: audio DL + Hold al salir del TG
+
+- **Audio Brew:** las llamadas de red nuevas abren el circuito en **SwMI** (antes LocalLoopback, pensado para LST; el audio remoto no salía al aire).
+- **Cambio de TG mid-QSO:** si el último walkie deja el GSSI, la sesión Brew se **retiene** (Hold) en lugar de End; al volver a afiliar se remonta + D-SETUP.
+
+## v0.3.30 — Fix OTA compile (late entry)
+
+- Visibilidad de `push_control` entre módulos CMCE + match exhaustivo en UMAC para los nuevos SAP de late entry (build release fallaba en 0.3.29).
+
+## v0.3.29 — Late entry usable (QSO a medias)
+
+- **Brew:** si llega GROUP_TX sin walkies afiliados, la llamada se **retiene** (pending) en lugar de tirarse; al primer Affiliate se monta circuito + D-SETUP + audio.
+- **Affiliate / cambio de TG:** D-SETUP inmediato si ya hay QSO en ese GSSI (no esperar ~5 s).
+- **Despacho LST:** al afiliar un TG con QSO activo, la consola engancha RX (`rx_gssi` verde + audio) sin textos nuevos.
+- **`late_entry_supported`** por defecto **true** en `[cell_info]`; checkbox en Config (celda Advanced) junto a System-wide services.
+
+## v0.3.28 — Site trunking suave (estilo DIMETRA / TIP)
+
+- Tras un blip de Brew **ya no** se expulsa a todos los walkies con `D-LOCATION-UPDATE-COMMAND`.
+- Al reconectar: resync de suscriptores al core (REGISTER/AFFILIATE); COMMAND solo **bajo demanda** a un ISSI si falla un setup vía Brew en la ventana de soft-recovery.
+- Histéresis de backhaul (default **3 s**): blips cortos de 4G/5G no cambian el menú “solo área local”. Las llamadas Brew se liberan al instante; los grupos locales en la celda siguen.
+- Nuevo `[brew] backhaul_hysteresis_secs` (0..=60).
+
+## v0.3.27 — TetraPack: no re-registro en la primera GROUP_TX
+
+- Si el core no anuncia versión en el handshake (TetraPack), la primera llamada con mnemonic ya no dispara `BrewReconnected` / `D-LOCATION-UPDATE-COMMAND`.
+- Ese barrido solo ocurre tras un disconnect→reconnect real del backhaul (sigue cubriendo PTT denegado tras blip).
+
+## v0.3.26 — OTA: RF OFF al empezar
+
+- Al iniciar una actualización OTA se apaga el SDR de inmediato (antes de compilar), para que las radios pierdan la celda limpiamente. El reinicio final vuelve a abrir RF desde config.
+
+## v0.3.25 — Modal Ubicación LIP (móvil)
+
+- En cada radio solo queda el botón **Centrar** (se quita el texto “Centrar todos” duplicado en la tarjeta).
+- El botón superior **Centrar todos** va centrado, más grande y en negrita.
+- Título del modal alineado en vertical con el botón de cerrar (móvil y PC).
+
+## v0.3.24 — Fix OTA: préstamo en lip_forward_issi
+
+- Corrige E0716 en `brew_routable` (temporary dropped while borrowed) que bloqueaba el build OTA de 0.3.23.
+
+## v0.3.23 — Reenvío LIP → Brew + dashboard estable
+
+- **Brew:** en Advanced (perfil y ajustes en vivo), **Reenvío de LIP** + **ISSI de destino** justo bajo RSSI export. Cada LIP UL (PID 10) se reenvía a ese ISSI por Brew, digan lo que digan las radios.
+- **Dashboard:** el WebSocket ya no ocupa un slot del tope de 32 conexiones HTTP; evita que, pasado un rato, API/WS fallen con timeout y haya que reiniciar.
+
+## v0.3.22 — Ubicación LIP: Centrar todos solo donde toca
+
+- Se quita **Centrar todos** del encabezado del modal.
+- En escritorio sigue en la cabecera de la columna de acciones; en móvil, entre el mapa y las tarjetas.
+- El **Centrar** por radio no cambia.
+
+## v0.3.21 — Audio LST adaptativo + Geo sin fugas
+
+- **PCM DL:** solo con despacho tomado. En llamada/RX activo vuelve a **80 ms** (latencia); en idle baja a **500 ms**.
+- **Ubicación LIP:** al cerrar el modal se destruye el mapa Leaflet (deja de pedir tiles OSM) y no se vuelve a consultar `/api/lst/positions` hasta reabrir.
+- Modal Geo: se elimina la barra redundante (Centrar todos + estado ISSI); **Centrar** / **Centrar todos** centrados en la columna de acciones (en móvil, Centrar todos pasa al encabezado).
+
+## v0.3.20 — Dashboard más ligero (Pi)
+
+- Tope de **32** conexiones HTTP(S) concurrentes: evita que el poll agresivo / reintentos tumben el proceso (ERR_CONNECTION_RESET).
+- Menos re-renders por RSSI (debounce 250 ms); timers de timeslots 150→250 ms.
+- Callsigns / LST status / Geo / service: no martillean la API si la pestaña está en segundo plano o el enlace está caído.
+
+## v0.3.19 — Modal Ubicación LIP
+
+- Título **Ubicación LIP** (antes Geo LIP).
+- **Centrar todos** pasa al encabezado de la columna de acciones; en móvil se muestra encima de la tabla (el thead se apila).
+- Se elimina Refresh (el modal ya refresca cada 5 s).
+- Cierre (×) ya no se superpone con el separador del título en móvil.
+
+## v0.3.18 — Filtro por tipo en Registro SDS
+
+- Selector Todos / LIP / Texto / Estado / Concat / Home / Otros junto a Exportar.
+- Se elimina Actualizar: el log se carga al abrir la pestaña y llega en vivo por WebSocket.
+
+## v0.3.17 — Ubicación en Inicio (sin LST)
+
+- Botón **Ubicación** en la tarjeta Radios registrados (Inicio): mismo modal Geo LIP que en LST.
+- El almacén de posiciones LIP vive en el dashboard (no depende del perfil LST Dispatch).
+
+## v0.3.16 — Botón Ubicación en roster LST
+
+- El botón **Ubicación** pasa a la tarjeta Radios online (sustituye el Refresh manual, redundante con el poll automático).
+
+## v0.3.15 — Marcador Geo LIP
+
+- Pin de mapa propio (CSS, color accent del dashboard); ya no depende de las PNG rotas de Leaflet/CDN.
+- Indicativo RadioID correcto en la tabla Geo.
+
+## v0.3.14 — Geo LIP en despacho LST
+
+- Las posiciones LIP decodificadas (SDS PID 10, UL) alimentan el almacén LST (`note_position`).
+- Botón **Geo** en la consola LST: modal con tabla + mapa OpenStreetMap (Leaflet lazy, solo al abrir).
+- Se ignoran coords 0,0 (handshake de inicialización). Requiere perfil LST Dispatch activo.
+
+## v0.3.13 — LIP decode + Miura restante
+
+- **LIP:** se decodifican informes cortos (SDS PID 10) a `LIP position: lat, lon` (ETSI TS 100 392-18-1). GeoAlarm/Telegram y el log SDS dejan de ver el payload vacío.
+- **Miura (resto):** `mon_pattern` / MPN 1 en channel allocation (PTT largo Sepura); D-RELEASE también por FACCH en el timeslot de tráfico.
+
+## v0.3.12 — Canal estable en `main`
+
+- El canal **Estable** sigue la rama git **`main`**.
+
+## v0.3.1
+
+- **Grupos afiliados:** el panel del chevron (›) ya no desaparece al instante. Se queda abierto hasta cerrarlo (×, clic fuera, Escape o de nuevo el chevron). Antes lo cerraban el refresco del roster, el scroll y un timer de 3,5 s; el `title` nativo del botón también confundía en móvil.
+
+## v0.3.0
+
+Lanzamiento estable (canal OTA **Estable** / rama `main`). Consolida el trabajo de la línea 0.2.4–0.2.41: despacho LST en producción, preempt de PTT, dashboard HTTPS canónico y correcciones de campo.
+
+### Actualización desde 0.2.x (estable)
+
+- OTA a **Estable** / `main` o reinstalar con `install-ptbs.sh` (no sobrescribe `config.toml` existente).
+- Al arrancar, si el dashboard seguía en puertos antiguos (`port = 8080`), se migra a `port = 80` + `https_port = 443`. Abre **`https://<IP>/`**.
+- Redirecciones silenciosas en `:8080` / `:8443` se mantienen solo por compatibilidad de marcadores viejos; **instalación e interfaz ya no anuncian esos puertos**.
+- Codec de voz LST: si falta, el OTA ofrece rebuild con libtetra-codec (sin SSH).
+
+### Despacho LST (consola local)
+
+- Consola bajo Integraciones: claim de sesión, ISSI despachador, lista de escaneo multi-TG, PTT (ratón/táctil/espacio), SDS, roster, actividad e inbox SDS.
+- Llamadas privadas simplex/dúplex (salientes y entrantes); modal/franja de llamada.
+- Audio ACELP vía codec OTA; dashboard canónico en HTTPS `:443` (HTTP `:80` redirige).
+- **Preempt / interrupción:** PTT LST puede quitar el suelo a un MS local (deny → oferta → Ready al UL quiet); sin teardown de circuito; sin flicker de display Motorola tras Ready.
+- Tras PTT de grupo, el dial privado SX/DX ya no queda bloqueado como “Establecida” con el GSSI.
+- Modal de llamada entrante solo en el navegador que tiene el despacho tomado (no molesta a otros agentes del dashboard).
+
+### Dashboard / Config / red
+
+- Dashboard HTTPS `:443` + redirect HTTP `:80` (instalador y docs alineados).
+- Ayuda «?» en Config (timers TETRA/Brew); whitelist ISSI en perfil Cell; fix TOML con 2+ ISSIs (evita arranque en fallback).
+- Wi‑Fi resiliencia (NM drop-in, autoconnect, watchdog) desde 0.2.2–0.2.3.
+- Pulidos UX LST/móvil, iconos de navegación, perfiles Cell × Brew.
+
+### Limpieza en 0.3.0
+
+- Eliminado el botón “Abrir consola segura (HTTPS)” del despacho (la UI ya sirve en HTTPS).
+- Mensajes de instalador / README / example_config sin publicar `:8080` / `:8443`.
+
+## v0.2.7
+
+- **LST Dispatch:** admit group `NetworkCallStart` without Brew (inbound gate). Join solo selecciona GSSI; PTT abre/cierra la llamada. SDS usa el ISSI del despacho (`source_issi` / `dest_is_group`). Privadas: media ready, duplex UL, errores visibles.
+
+## v0.2.6
+
+- Fix LST PTT borrow-checker errors so `tetra-entities` compiles on OTA.
+
+## v0.2.5
+
+- Fix OTA build: import `CfgLstDispatch` / `apply_lst_dispatch_patch` in tetra-config.
+
+## v0.2.4
+
+- **Despacho LST / LST Dispatch:** consola local bajo Integraciones (mic/altavoz del navegador). Perfil Brew inmutable “Despacho LST”, 1 sesión, XOR con Brew real. Grupo + privadas simplex/dúplex + SDS + roster; codec de voz si el build incluye `asterisk`.
+
+## v0.2.3
+
+- OTA / arranque aplican solos el drop-in NetworkManager `ptbs-wifi.conf` (powersave off): **no hace falta SSH**.
+
+## v0.2.2
+
+- **WiFi resiliencia:** Disconnect usa `connection down` (ya no inhibe autoconnect). Al conectar se fuerza autoconnect + powersave off en el perfil. Watchdog ligero re-sube un perfil guardado si el enlace cae con la radio WiFi encendida.
+- Instalador: drop-in NetworkManager `ptbs-wifi.conf` (`wifi.powersave=2`). Docs de comprobación en install-and-setup.
+
+## v0.2.1
+
+- Config U-STATUS: en PC los comandos vuelven a una sola fila (código | acción | Quitar); el layout móvil compacto no cambia.
+
+## v0.2.0
+
+Lanzamiento estable con cambios de producto (no solo parches). Canal OTA **Estable** (`ptbs`).
+
+- **Dashboard móvil:** shell, System/OTA/Setup, tablas, RF/Health, Config, DGNA/Geoalarm/Wi‑Fi e integraciones usables en teléfono (PC sin cambios de layout salvo lo acordado).
+- **OTA más robusto:** modal al instante, checks coalescidos y en caché, purge de `.git` vacío, mensajes claros, espera post-reinicio que exige “caída → subida” y lleva a login cuando hay auth (evita SPA “fuera de línea”).
+- **Config / perfiles:** timers de Advanced network con reset a default (vacío = default del motor); Live y perfiles Cell comparten la misma semántica de persistencia.
+- **Home:** perfiles rápidos Cell × Brew; pulidos de UI (Save al pie, mensajes vacíos, U-STATUS compacto, etc.).
+
+## v0.1.57
+
+- Instalador alineado con OTA: fetch con refspec + reintentos, `reset --hard`, y `ota_channel` según `PTBS_BRANCH`.
+- README / docs de instalación actualizados (comando curl desde la rama `main`).
+
+## v0.1.56
+
+- OTA: reintentos de `git fetch` ante cortes TLS/red (p. ej. GnuTLS en Pi).
+
+## v0.1.55
+
+- Paso Progreso OTA: estado superior corto, tip distinto bajo la barra y tiempo transcurrido en negrita.
+
+## v0.1.54
+
+- Novedades humanas en la pantalla de actualización (CHANGELOG / Releases).
+- El banner de “actualización disponible” abre directamente el resumen de cambios.
+- Modal OTA con indicador de pasos más claro (canal → novedades → progreso).
+
+## v0.1.53
+
+- Corrección de compilación en el helper de permisos OTA (`append` / `&str`).
+
+## v0.1.52
+
+- Tras sincronizar el código como root, se ajusta la propiedad de todo el árbol de fuentes
+  (no solo `target/`) para que `cargo` como usuario `bts` no falle en `Cargo.lock`.
+
+## v0.1.51
+
+- Al cambiar de canal (p. ej. a Beta), el fetch crea correctamente `origin/<rama>`
+  para que la actualización no falle con “unknown revision”.
+
+## v0.1.50
+
+- Diálogo OTA en tres pasos: elegir canal, ver novedades y confirmar, luego progreso.
+- El selector de canal se guarda y sigue alimentando el badge / banner automático.
+
+## v0.1.49
+
+- Corrección de un error de compilación en la configuración del canal OTA.
+
+## v0.1.48
+
+- Canales OTA **Estable** (`ptbs`) y **Beta** (`beta`).
+- Sincronización segura con `git reset --hard` (recupera force-push) manteniendo `target/`
+  para builds incrementales.
+- Si el binario ya coincide con HEAD, no se recompila ni se reinicia en falso.
