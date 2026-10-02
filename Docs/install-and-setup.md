@@ -12,8 +12,6 @@ curl -fsSL https://raw.githubusercontent.com/Aitorrio/ptbs-dist/main/contrib/ins
 
 Beta: `curl -fsSL https://raw.githubusercontent.com/Aitorrio/ptbs-dist/beta/contrib/install/install-ptbs.sh | sudo env PTBS_BRANCH=beta bash`
 
-From a checkout: `sudo ./contrib/install/install-ptbs.sh`
-
 ### What the script does
 
 1. Installs runtime packages (`curl`, `soapysdr-tools`, Lime module if apt has it). No Rust, unless `PTBS_DEV=1`.
@@ -45,7 +43,7 @@ iw dev wlan0 get power_save
 nmcli -f connection.autoconnect,802-11-wireless.powersave connection show <ssid>
 ```
 
-OTA installs the same drop-in when the service runs as root. Manual fallback (from a checkout):
+OTA installs the same drop-in when the service runs as root. Manual fallback, from this repository:
 
 ```bash
 sudo install -m 644 contrib/install/networkmanager/ptbs-wifi.conf \

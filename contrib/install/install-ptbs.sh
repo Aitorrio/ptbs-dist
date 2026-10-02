@@ -4,7 +4,6 @@
 #
 # Usage:
 #   curl -fsSL https://raw.githubusercontent.com/Aitorrio/ptbs-dist/main/contrib/install/install-ptbs.sh | sudo bash
-#   sudo ./contrib/install/install-ptbs.sh
 #
 # Env:
 #   PTBS_BRANCH          main (stable, default) or beta
@@ -24,7 +23,7 @@ warn() { echo "WARNING: $*" >&2; }
 die() { echo "ERROR: $*" >&2; exit 1; }
 
 if [[ "$(id -u)" -ne 0 ]]; then
-  die "run as root (sudo bash contrib/install/install-ptbs.sh)"
+  die "run as root (sudo bash)"
 fi
 
 BRANCH="${PTBS_BRANCH:-main}"
