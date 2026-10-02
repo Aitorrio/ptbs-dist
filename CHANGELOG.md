@@ -7,7 +7,7 @@ Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu v
 La cuenta que crea el instalador para el helper del asistente se llama `ptbs`, igual que el producto. Si ya existe (por ejemplo en Raspberry Pi Imager), se reutiliza. El servicio sigue arrancando como root.
 
 - Instalación y OTA salen del repo público `Aitorrio/ptbs-dist` (`latest-stable` / `latest-beta`).
-- El README público describe instalación, funciones y ajustes. El instalador vive solo en ese repo.
+- El README público es la guía de uso: instalación, asistente, perfiles, ajustes, despacho y copias. El instalador vive solo en ese repo.
 - Los binarios de release se compilan con LTO, `codegen-units = 1` y símbolos eliminados. Un panic de un paquete sigue contenido: no aborta el proceso.
 
 ## v0.5.0 — PTBS (Personal Tetra Base Station)
