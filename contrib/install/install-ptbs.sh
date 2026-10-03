@@ -68,23 +68,63 @@ log "Comprobando la suma…"
 ) || die "la suma no coincide — no se ha instalado nada"
 
 log "Instalando…"
-apt-get install -y -qq "$WORKDIR/ptbs_arm64.deb" >/tmp/ptbs-apt.err 2>&1 \
-  || { cat /tmp/ptbs-apt.err >&2; die "no se pudo instalar el paquete"; }
+# On a terminal, apt draws its own download bar (same idea as curl -#).
+# Quiet only when there is nowhere to show it; errors still surface.
+if [[ -t 1 ]]; then
+  apt-get install -y -o Dpkg::Progress-Fancy=1 "$WORKDIR/ptbs_arm64.deb" \
+    || die "no se pudo instalar el paquete"
+else
+  apt-get install -y -qq "$WORKDIR/ptbs_arm64.deb" >/tmp/ptbs-apt.err 2>&1 \
+    || { cat /tmp/ptbs-apt.err >&2; die "no se pudo instalar el paquete"; }
+fi
 
 log "Arrancando…"
-systemctl enable --now ptbs.service >/dev/null 2>&1 || true
+systemctl daemon-reload >/dev/null 2>&1 || true
+systemctl enable ptbs.service >/dev/null 2>&1 || true
+if ! systemctl restart ptbs.service; then
+  journalctl -u ptbs.service -n 30 --no-pager >&2 || true
+  die "el servicio no ha arrancado; el panel no está a la escucha"
+fi
+sleep 2
+if ! systemctl is-active --quiet ptbs.service; then
+  journalctl -u ptbs.service -n 30 --no-pager >&2 || true
+  die "el servicio no se ha quedado en marcha"
+fi
 
 IP="$(hostname -I 2>/dev/null | awk '{print $1}')"
 IP="${IP:-<ip-de-la-pi>}"
 
+# ASCII only: box-drawing characters drift in some SSH fonts, and printf
+# counts bytes, so a letter like ñ shifts the right border.
+export LC_ALL=C.UTF-8
+pad() {
+  local text="$1" width="$2" n pad
+  n=${#text}
+  pad=$((width - n))
+  if (( pad < 0 )); then
+    printf '%s' "$text"
+  else
+    printf '%s%*s' "$text" "$pad" ''
+  fi
+}
+rule() {
+  local left right
+  left=$(printf '%*s' 16 '' | tr ' ' '-')
+  right=$(printf '%*s' 44 '' | tr ' ' '-')
+  printf '  %s%s%s%s%s\n' "$1" "$left" "$2" "$right" "$3"
+}
+row() {
+  printf '  | %s | %s |\n' "$(pad "$1" 14)" "$(pad "$2" 42)"
+}
+
 printf '\n'
-printf '  ┌──────────────┬──────────────────────────────────────────┐\n'
-printf '  │ %-12s │ %-40s │\n' "Panel" "https://${IP}/"
-printf '  │ %-12s │ %-40s │\n' "Usuario" "admin"
-printf '  │ %-12s │ %-40s │\n' "Contraseña" "1234"
-printf '  │ %-12s │ %-40s │\n' "Config" "/etc/ptbs/config.toml"
-printf '  │ %-12s │ %-40s │\n' "Servicio" "ptbs.service"
-printf '  │ %-12s │ %-40s │\n' "Canal" "${CANAL}"
-printf '  └──────────────┴──────────────────────────────────────────┘\n'
+rule '+' '+' '+'
+row "Panel" "https://${IP}/"
+row "Usuario" "admin"
+row "Contraseña" "1234"
+row "Config" "/etc/ptbs/config.toml"
+row "Servicio" "ptbs.service"
+row "Canal" "${CANAL}"
+rule '+' '+' '+'
 printf '\n  El asistente del panel termina la instalación.\n'
 printf '  No se puede omitir: sin él la estación no queda en el aire.\n\n'

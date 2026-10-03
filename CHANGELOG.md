@@ -10,6 +10,7 @@ El paquete `.deb` es el producto: programa, codec de voz, servicio, helper y con
 - SoapySDR y el driver no van dentro del paquete. Si `SoapySDRUtil` falta, el asistente lo instala. Un `--find` sin radios ya no se confunde con la utilidad ausente.
 - La voz LST va dentro del `.deb`. El fichero suelto `libtetra-codec.so` sigue en el release para que una 0.5.1 pueda actualizarse; se retira en 0.5.4.
 - Panel inicial `admin` / `1234`, HTTP 80 y HTTPS 443. Sin pregunta de puerto.
+- El paquete depende de la librería SoapySDR. Sin ella el servicio no arranca y el panel no abre. SoapySDRUtil y el driver siguen en el asistente.
 
 ## v0.5.1 — Cuenta auxiliar `ptbs`
 
