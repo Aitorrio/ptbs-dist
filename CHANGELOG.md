@@ -2,6 +2,15 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.2 — El asistente termina la instalación
+
+El paquete `.deb` es el producto: programa, codec de voz, servicio, helper y configuración con la radio apagada. El script solo descarga ese paquete y lo instala. El asistente del panel, que no se puede omitir, hace el resto.
+
+- Orden del asistente: internet, SoapySDR, radio conectada, driver (SXceiver o Lime), valores de fábrica, arranque automático y Finalizar. Finalizar enciende la radio y reinicia.
+- SoapySDR y el driver no van dentro del paquete. Si `SoapySDRUtil` falta, el asistente lo instala. Un `--find` sin radios ya no se confunde con la utilidad ausente.
+- La voz LST va dentro del `.deb`. El fichero suelto `libtetra-codec.so` sigue en el release para que una 0.5.1 pueda actualizarse; se retira en 0.5.4.
+- Panel inicial `admin` / `1234`, HTTP 80 y HTTPS 443. Sin pregunta de puerto.
+
 ## v0.5.1 — Cuenta auxiliar `ptbs`
 
 La cuenta que crea el instalador para el helper del asistente se llama `ptbs`, igual que el producto. Si ya existe (por ejemplo en Raspberry Pi Imager), se reutiliza. El servicio sigue arrancando como root.

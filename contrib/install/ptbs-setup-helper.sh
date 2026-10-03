@@ -37,8 +37,24 @@ resolve_soapysx_src() {
   return 1
 }
 
-install_driver_lime() {
+ensure_soapysdr_util() {
+  if command -v SoapySDRUtil >/dev/null 2>&1 || [[ -x /usr/bin/SoapySDRUtil || -x /usr/local/bin/SoapySDRUtil ]]; then
+    return 0
+  fi
   export DEBIAN_FRONTEND=noninteractive
+  apt-get update -qq
+  apt-get install -y soapysdr-tools \
+    || apt-get install -y soapysdr0.8-tools \
+    || die "could not install soapysdr-tools (SoapySDRUtil)"
+  command -v SoapySDRUtil >/dev/null 2>&1 || [[ -x /usr/bin/SoapySDRUtil || -x /usr/local/bin/SoapySDRUtil ]] \
+    || die "soapysdr-tools installed but SoapySDRUtil is not on PATH"
+}
+
+install_driver_lime() {
+  echo "PHASE deps"
+  ensure_soapysdr_util
+  export DEBIAN_FRONTEND=noninteractive
+  echo "PHASE install"
   apt-get update -qq
   # Package names vary across Debian/RPi OS releases.
   local pkgs=()
@@ -69,10 +85,12 @@ sx_module_present() {
 }
 
 install_driver_sx() {
+  ensure_soapysdr_util
   # Official flow from https://sxceiver.com/doc/getting-started and tejeez/sxxcvr.
   # If the module is already installed, succeed quickly — do NOT --probe while
   # ptbs holds the GPIO (that looks like a failure in the wizard).
   if sx_module_present; then
+    echo "PHASE install"
     log "SXceiver Soapy module already installed"
     SoapySDRUtil --find 2>/dev/null | head -n 20 || true
     echo "OK: driver=sx ready (skip rebuild; device may be busy if RF is online)"
@@ -95,6 +113,7 @@ install_driver_sx() {
     fi
   done
 
+  echo "PHASE deps"
   export DEBIAN_FRONTEND=noninteractive
   apt-get update -qq
   apt-get install -y --no-install-recommends \
@@ -105,6 +124,7 @@ install_driver_sx() {
   # Optional on some boards / Debian releases.
   apt-get install -y libgpiod-dev 2>/dev/null || true
 
+  echo "PHASE clone"
   if [[ -z "$tree" ]]; then
     log "Cloning SXceiver software from $SOAPY_SX_GIT → $SOAPY_SX_DIR"
     mkdir -p "$(dirname "$SOAPY_SX_DIR")"
@@ -121,9 +141,11 @@ install_driver_sx() {
   local src
   src="$(resolve_soapysx_src "$tree")" || die "SoapySX/CMakeLists.txt not found under $tree"
 
+  echo "PHASE build"
   log "Building SoapySX in $src"
   cmake -S "$src" -B "$src/build" -DCMAKE_BUILD_TYPE=Release
   cmake --build "$src/build" -j"$(nproc)"
+  echo "PHASE install"
   cmake --install "$src/build"
   ldconfig || true
 
