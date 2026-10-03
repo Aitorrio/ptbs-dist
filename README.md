@@ -43,7 +43,9 @@ La Pi no necesita Rust ni un compilador. El instalador baja el programa ya compi
 
 ## Instalación automática
 
-Abre una terminal en la Pi (o por SSH) y pega **una** de estas órdenes.
+Previamente crea una imagen de Debian para tu Raspberry Pi con su programa oficial. Se aconsejan versiones "lite" sin interfaz gráfica.
+Es importante que crees el usuario "ptbs" y que sea super usuario, el instalador, el asistente de inicio y el gestor OTA lo usarán.
+Abre una terminal en la Pi (o por SSH) y pega **una** de estas órdenes con el usuario "ptbs" que creaste anteriormente.
 
 Canal estable:
 
