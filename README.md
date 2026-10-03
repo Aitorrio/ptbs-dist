@@ -37,7 +37,7 @@ La radio puede estar apagada y el panel sigue respondiendo. Así se configura el
 - Las radios programadas con el mismo MCC, MNC, colour code y el par de frecuencias de la celda.
 - Un navegador en el mismo equipo o en la red local. El micrófono del despacho exige **HTTPS**.
 
-La Pi no necesita Rust ni un compilador. El instalador baja el programa ya compilado y la librería de voz.
+La Pi no necesita Rust ni un compilador. El instalador baja el paquete ya compilado. La voz va dentro.
 
 ---
 
@@ -61,14 +61,12 @@ El estable sigue el release `latest-stable`. El beta sigue `latest-beta`. En una
 
 El script hace esto, en orden:
 
-1. Instala lo mínimo para arrancar (`curl`, herramientas SoapySDR y, si apt lo tiene, el módulo Lime). No instala Rust.
-2. Descarga `ptbs`, `libtetra-codec.so` y `ptbs.sha256` del release del canal y comprueba las sumas.
-3. Copia el programa a `/usr/local/bin/ptbs` y el codec de voz a `/usr/local/lib/libtetra-codec.so`.
-4. Si no existe, crea `/etc/ptbs/config.toml`. La radio queda apagada a propósito (`phy_io.backend = "None"`) para que el panel abra aunque todavía no haya SDR.
-5. Deja el acceso del panel en `admin` / `1234` y elige puertos: los normales (HTTP 80 redirige a HTTPS 443) o, si se lo pides, solo HTTPS 8443.
-6. Crea una copia de reserva `config.toml.fallback` y el estado del asistente.
-7. Prepara el helper del asistente (la cuenta Linux `ptbs`, solo para ese helper) y, si hay NetworkManager, un ajuste para que el Wi-Fi no se duerma.
-8. Activa y arranca el servicio `ptbs`.
+1. Instala `curl` si falta. No instala Rust ni SoapySDR.
+2. Descarga `ptbs_arm64.deb` y `ptbs.sha256` del release del canal y comprueba la suma.
+3. Instala el paquete. Dentro van el programa, el codec de voz, el servicio, el helper del asistente y, en el primer arranque, la configuración.
+4. La radio queda apagada (`phy_io.backend = "None"`) para que el panel abra aunque todavía no haya SDR.
+5. El panel queda en `admin` / `1234`, HTTP 80 y HTTPS 443.
+6. Activa y arranca `ptbs`.
 
 Al terminar, la terminal imprime la dirección del panel.
 
@@ -76,7 +74,6 @@ Al terminar, la terminal imprime la dirección del panel.
 | | |
 |---|---|
 | Panel | `https://<ip-de-la-pi>/` |
-| Si elegiste el puerto alto | `https://<ip-de-la-pi>:8443/` |
 | Usuario inicial | `admin` |
 | Contraseña inicial | `1234` |
 | Configuración | `/etc/ptbs/config.toml` |
@@ -84,7 +81,7 @@ Al terminar, la terminal imprime la dirección del panel.
 
 ![Instalación terminada: dirección del panel, usuario y servicio](Docs/screenshots/install.png)
 
-Si vuelves a lanzar el mismo instalador, **no pisa** la configuración ni la reserva. Sustituye el programa y el codec por los del canal.
+Si vuelves a lanzar el mismo instalador, **no pisa** la configuración ni la reserva. Sustituye el programa y el codec que van dentro del paquete.
 
 Una estación antigua no se convierte sola en PTBS. Exporta antes una copia `.bptbs` (más abajo), instala PTBS limpio e impórtala.
 
@@ -137,38 +134,41 @@ En el móvil la barra se abre con el menú. Los botones de tema, idioma y alimen
 
 ## Asistente de alta
 
-El asistente deja el SDR elegido, la radio encendida y el servicio listo para volver tras un corte de luz. Puedes omitir pasos y volver más tarde.
+El asistente termina lo que el paquete no trae: el software de la radio, el driver y el encendido. No se puede cerrar ni omitir. Hasta **Finalizar**, la estación no transmite.
 
 ![Bienvenida del asistente](Docs/screenshots/wizard.png)
 
 ### 1. Bienvenida
 
-Explica que el panel sigue vivo aunque la radio esté apagada. **Continuar** entra en la configuración. **Omitir con valores por defecto** deja la estación como está y sales del asistente.
+Explica que este paso cierra la instalación. **Continuar**.
 
-### 2. Seleccionar SDR
+### 2. Internet
 
-**Escanear** busca dispositivos SoapySDR ya instalados. Si el tuyo no sale:
+Muestra el enlace que ya estás usando (tú y la Pi) y comprueba si la Pi llega a la red de paquetes y a GitHub. Sin esa salida no se puede seguir.
 
-- **Instalar SXceiver** para ese hardware.
-- **Instalar Lime** para un LimeSDR.
+### 3. Software de la radio
 
-La instalación del controlador la hace la estación. No hace falta apt a mano. Cuando el equipo aparece, queda elegido como dispositivo de la celda.
+Instala SoapySDR, que no va dentro del paquete. Hay una barra de progreso.
 
-<!-- captura: asistente-sdr -->
+### 4. Seleccionar SDR
 
-### 3. RF, red y Brew
+Si Soapy ve una sola radio, queda elegida. Si ve varias, eliges. Si no ve ninguna (un HAT SXceiver a menudo no aparece hasta tener el driver), eliges SXceiver o Lime.
 
-Puedes **usar los valores actuales** y afinarlos después en Config, o abrir Config desde aquí. Lo mínimo para que una radio entre es: frecuencia de bajada (TX de la base, RX de la radio), dúplex, colour code, MCC y MNC. Tienen que coincidir con la programación de las radios.
+### 5. Driver
 
-### 4. Activar RF
+Instala el controlador de esa radio. SXceiver se compila en la Pi; la barra lo va contando.
 
-Este paso enciende la radio de verdad: guarda el SDR, pone el backend en marcha y **reinicia** el servicio. Hasta aquí la estación no transmitía. Después del reinicio el navegador vuelve solo; si pide la contraseña, entra otra vez.
+### 6. Valores de fábrica
 
-<!-- captura: asistente-activar-rf -->
+La celda, la red y Brew se quedan como en el ejemplo. La radio sigue apagada. Eso se cambia después en Config.
 
-### 5. Arranque automático
+### 7. Arranque automático
 
-Comprueba que `ptbs` arranca con la Pi. **Finalizar** cierra el asistente.
+El servicio queda activado para volver tras un reinicio.
+
+### 8. Finalizar
+
+Enciende la radio, guarda el SDR elegido y reinicia. Después el navegador vuelve solo; si pide la contraseña, entra otra vez. Ahí se cierra el asistente.
 
 Si más adelante cambias de SDR, vuelve a **Setup**. El identificador del dispositivo se fija ahí. En Config se ve, pero no es el sitio para cambiar de equipo.
 
@@ -404,7 +404,7 @@ Esas tres acciones también están en el menú de alimentación de la barra supe
 2. **Comprobar actualizaciones**. Si hay algo nuevo, o falta el codec de voz, la barra muestra un aviso.
 3. **Actualizar** abre tres pasos: canal, novedades y progreso.
 
-La estación descarga el programa y `libtetra-codec.so` de ese canal, comprueba el SHA-256, los instala y reinicia. No compila nada en la Pi. Deja la ventana abierta hasta que la página vuelva. Perder el contacto unos segundos durante el reinicio es normal.
+La estación descarga el programa y el codec de voz de ese canal, comprueba el SHA-256, los instala y reinicia. No compila nada en la Pi. Deja la ventana abierta hasta que la página vuelva. Perder el contacto unos segundos durante el reinicio es normal. El codec suelto del release es un puente para estaciones 0.5.1; a partir de 0.5.2 también va dentro del paquete.
 
 ![Paso 1: elegir el canal](Docs/screenshots/ota-canal.png)
 
@@ -467,7 +467,7 @@ Si el navegador no vuelve tras un reinicio, espera un minuto y recarga. En la Pi
 | Estable | `latest-stable` | Uso normal |
 | Beta | `latest-beta` | Probar lo último, sabiendo que puede cambiar |
 
-Esos dos son los únicos tags. Cada release incluye el programa `ptbs`, la librería `libtetra-codec.so`, el paquete `ptbs_arm64.deb` y `ptbs.sha256`.
+Esos dos son los únicos tags. Cada release incluye el paquete `ptbs_arm64.deb` (programa y codec de voz), el programa `ptbs`, la librería suelta `libtetra-codec.so` (puente de actualización hasta 0.5.3) y `ptbs.sha256`.
 
 ---
 

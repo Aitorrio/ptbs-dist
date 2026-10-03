@@ -1,6 +1,6 @@
 # Install & first-run setup (PTBS)
 
-Clean install for Raspberry Pi OS / Debian **arm64**. The script downloads a prebuilt binary. It does not install Rust. The station starts with RF off so the dashboard is reachable; finish SDR and RF in the Setup wizard.
+Clean install for Raspberry Pi OS / Debian **arm64**. The script downloads `ptbs_arm64.deb` and installs it. It does not install Rust. The station starts with RF off so the dashboard is reachable; the Setup wizard finishes SoapySDR, the driver and RF, and cannot be skipped.
 
 A Pi already running 0.4.7 is not upgraded by this script. Export a `.bptbs`, stop that station, then install PTBS and import the backup.
 
@@ -14,19 +14,13 @@ Beta: `curl -fsSL https://raw.githubusercontent.com/Aitorrio/ptbs-dist/beta/cont
 
 ### What the script does
 
-1. Installs runtime packages (`curl`, `soapysdr-tools`, Lime module if apt has it). No Rust, unless `PTBS_DEV=1`.
-2. Downloads `ptbs`, `libtetra-codec.so` and `ptbs.sha256` from `latest-stable` (or `latest-beta`) and checks the checksums.
-3. Installs `/usr/local/bin/ptbs` and `/usr/local/lib/libtetra-codec.so`.
-4. Writes `/etc/ptbs/config.toml` if missing, with:
-   - `phy_io.backend = "None"`
-   - dashboard ports **standard** (`:80`→`:443`) or **high** (HTTPS `:8443`), login `admin` / `1234`
-   - `service_name = "ptbs"` and `ota_channel`
-   - sibling `config.toml.fallback` and `setup.json`
-5. Installs `ptbs-setup-helper.sh` and a sudoers drop-in.
-6. Installs the NetworkManager Wi-Fi drop-in when NetworkManager is present.
-7. Enables and starts `ptbs.service`.
+1. Installs `curl` if it is missing. No Rust and no SoapySDR.
+2. Downloads `ptbs_arm64.deb` and `ptbs.sha256` from `latest-stable` (or `latest-beta`) and checks the checksum.
+3. Installs the package. It contains `/usr/local/bin/ptbs`, `/usr/local/lib/libtetra-codec.so`, the systemd unit, the setup helper, a sudoers drop-in limited to that helper, and the NetworkManager Wi-Fi drop-in.
+4. On first boot the package writes `/etc/ptbs/config.toml` with `phy_io.backend = "None"`, dashboard `admin` / `1234` on HTTP 80 and HTTPS 443, `config.toml.fallback` and `setup.json`.
+5. Enables and starts `ptbs.service`.
 
-Dispatch loads `/usr/local/lib/libtetra-codec.so` at startup. SDR drivers stay in the Setup wizard.
+Dispatch loads `/usr/local/lib/libtetra-codec.so` from the package. The wizard does not download the codec. SDR drivers stay in the Setup wizard.
 
 ### Wi-Fi resilience (Raspberry Pi)
 
@@ -90,7 +84,7 @@ Allowed actions: `install-driver sx|lime`, `enable-service`, `restart-service`.
 
 ## Updating an existing PTBS install
 
-Prefer **System → Update** on the dashboard. That downloads the release binary and the voice library, checks SHA-256, and restarts. It does not compile. Re-running `install-ptbs.sh` does the same and keeps `/etc/ptbs/config.toml`. To show the wizard again, set `"setup_complete": false` in `/etc/ptbs/setup.json`.
+Prefer **System → Update** on the dashboard. That downloads the release binary and the voice library, checks SHA-256, and restarts. It does not compile. The loose `libtetra-codec.so` asset stays on the release through 0.5.3 so a 0.5.1 station can still update; the library is also inside the `.deb` from 0.5.2. Re-running `install-ptbs.sh` installs that package again and keeps `/etc/ptbs/config.toml`. To show the wizard again, set `"setup_complete": false` in `/etc/ptbs/setup.json`.
 
 Moving a 0.4.7 station: export `.bptbs` there, stop that station, install PTBS, import under **System → Backup**.
 
