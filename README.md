@@ -198,7 +198,7 @@ Hay dos familias, y se aplican **en pareja**:
 
 | Familia | Qué guarda |
 |---|---|
-| **TMO Cell** | La celda: frecuencias, colour code, MCC/MNC, área, temporizadores y la lista blanca de esa celda |
+| **TMO Cell** | La celda: frecuencias, colour code, MCC/MNC, área, temporizadores, celdas vecinas aisladas y la lista blanca de esa celda |
 | **Core Net (Brew)** | A dónde se enlaza: sin red, un servidor Brew, o el despacho |
 
 **Offline (sin Brew)** y **Despacho LST** vienen de serie y no se pueden borrar.
@@ -226,6 +226,39 @@ En la ficha de la celda están las frecuencias en **MHz** (coma o punto; al sali
 Colour code (0–63), MCC, MNC y área de localización tienen que ser los de tus radios. La zona horaria (por ejemplo `Europe/Madrid`) solo afecta al reloj que muestra la estación.
 
 **RF avanzada** y **Hardware RF** están cerrados. Ahí viven el dúplex personalizado, el offset fino, el PPM del SDR y las ganancias. El dispositivo SDR es de solo lectura: se cambia en Setup. Una ganancia que no pertenece a tu controlador (un control de Lime en un SXceiver, por ejemplo) se rechaza al guardar. Un campo vacío significa «el valor por defecto del equipo».
+
+### Celdas vecinas aisladas
+
+Está en **Identidad TETRA**, en la ficha del perfil **TMO Cell** y en **Config → Ajustes en vivo**. Es la misma lista.
+
+Cada estación anuncia hasta siete celdas vecinas. El móvil ve esas portadoras y, con el área de localización distinta, puede registrarse en la otra por su cuenta. Cada vecina es otra estación, con su propio Brew. No hay una gestión central entre las dos: la llamada que el móvil trae puesta se corta.
+
+Las dos estaciones se apuntan la una a la otra, con el mismo MCC y MNC. En el perfil, **Guardar** deja la lista en la ficha y sale al aire con **Aplicar y reiniciar**. En ajustes en vivo, **Aplicar y reiniciar** escribe la config que está corriendo.
+
+En cada fila:
+
+- **Nombre.** Solo para el panel. No sale al aire.
+- **Portadora.** El número de portadora principal de la otra estación. Tiene que ser distinto del de esta.
+- **Área de localización.** Obligatoria, y distinta de la de esta celda. Si coincide, el móvil cambia de portadora y no se registra: la de llegada no se entera.
+
+**Añadir celda** suma una fila, hasta siete. **Eliminar** quita una fila. Guardar la lista vacía borra las vecinas que hubiera. El panel lo avisa: **Desactivado, no hay Roaming para los MS**. Sin vecinas, el móvil no tiene roaming.
+
+Los umbrales son de esta celda. Van en pasos de 2 dB, entre 0 y 30. Por defecto: **Umbral rápido** 10 dB, **Margen del umbral lento** 6 dB, **Histéresis lenta** 6 dB e **Histéresis rápida** 6 dB. Cada campo se restablece como los temporizadores; la ayuda muestra «por defecto». Solo se anuncian si hay al menos una vecina.
+
+#### Qué esperar
+
+Con las dos estaciones emitiendo a la vez, esto es lo que se ha visto en campo:
+
+- El móvil se registra en la otra celda mientras la vieja sigue emitiendo. Al alejarse hay un hueco corto. La vieja no recibe la baja y sigue contando ese ISSI hasta que vence el registro periódico.
+- La llamada en curso se corta.
+- Si en la celda de llegada ese grupo ya está en el aire por su Brew, el móvil entra por late entry al afiliarse.
+- Un PTT nuevo se concede en la celda de llegada. En la de origen, cuando ya no se decodifica el uplink, el walkie da PTT denegado.
+- El dúplex también se corta. Al recuperar cobertura, una llamada nueva o una entrante llegan en la celda donde el ISSI está registrado.
+- Con Brew caído (site trunking), el móvil prefiere la celda que sí tiene red, aunque la otra se oiga más fuerte. Para ver el salto por cobertura, la estación que llevas encima tiene que seguir con Brew.
+
+El móvil compara la bajada en su antena. El RSSI que muestra la estación es la subida. Con la histéresis rápida a 6 dB, una vez acampado no se va hasta que la otra le llegue unos 6 dB mejor.
+
+Quedan fuera de esta función: `U-PREPARE`, PTMS, la sincronía entre estaciones y el traspaso anunciado.
 
 ### Qué va en Brew
 
@@ -261,6 +294,8 @@ Un `.ptbs` no es una copia de la estación. Para eso está el `.bptbs`, en Siste
 **Config → Ajustes en vivo** edita la estación que está corriendo, no un perfil guardado. Sirve para una corrección puntual: una frecuencia, el PPM, la lista blanca de hoy.
 
 **Aplicar y reiniciar** escribe esos formularios en `/etc/ptbs/config.toml` y reinicia. El JSON del perfil **no** se actualiza. Si luego aplicas el perfil antiguo, esa corrección se pierde. Si el cambio debe quedarse, edita el perfil y guárdalo.
+
+**Identidad TETRA → Celdas vecinas aisladas** es la misma lista que en el perfil TMO. Cómo se rellena y qué hace el móvil está en [Celdas vecinas aisladas](#celdas-vecinas-aisladas).
 
 <!-- captura: ajustes-en-vivo -->
 
