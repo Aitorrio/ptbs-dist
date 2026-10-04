@@ -2,6 +2,15 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.3 — Celdas vecinas aisladas
+
+Cada estación puede anunciar hasta siete celdas vecinas. El móvil ve esas portadoras y puede registrarse en ellas si el área de localización es distinta. No hay una gestión central: al salir de la celda, la llamada en curso se corta.
+
+- La lista está en Identidad TETRA, tanto en la config en vivo como en los perfiles TMO.
+- Los umbrales de reselección salen a 10, 6, 6 y 6 dB. Cada uno se puede devolver a ese valor.
+- Sin vecinas, el móvil no tiene roaming.
+- El panel de actualización muestra estas notas y titula el diálogo «Actualización OTA».
+
 ## v0.5.2 — El asistente termina la instalación
 
 El paquete `.deb` es el producto: programa, codec de voz, servicio, helper y configuración con la radio apagada. El script solo descarga ese paquete y lo instala. El asistente del panel, que no se puede omitir, hace el resto.

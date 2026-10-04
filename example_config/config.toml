@@ -246,6 +246,12 @@ voice_service = true
 ###############################################################################
 # OPTIONAL: Neighbor Cell Broadcast (NCB)
 #
+# Isolated neighbors: each station keeps its own Brew. The dashboard edits this
+# list under TETRA identity → Isolated neighbor cells (live config and TMO cell
+# profiles). The radio can camp on the other carrier and register if that cell
+# allows the ISSI. The call in progress is dropped. Give the neighbor a different
+# location area from this cell, or the radio will not register on arrival.
+#
 # Advertises adjacent TETRA cells to terminals so they know where to roam.
 # Broadcast in D-NWRK-BROADCAST PDU, alongside the network time (~61s cadence).
 # Up to 7 neighbor cells supported. Each must have a unique cell_identifier_ca
@@ -258,7 +264,7 @@ voice_service = true
 #
 # [[cell_info.neighbor_cells_ca]]
 # cell_identifier_ca = 1                # 0-31, unique within CA cluster
-# cell_reselection_types_supported = 1  # 0=none, 1=announced, 2=unannounced, 3=both
+# cell_reselection_types_supported = 0  # 0 = no forward registration (undeclared, unannounced, announced type 3)
 # neighbor_cell_synchronized = false    # true if time-sync'd with us
 # cell_load_ca = 0                      # 0=low, 1=medium-low, 2=medium-high, 3=high
 # main_carrier_number = 1525            # 0-4095, must differ from our main_carrier
