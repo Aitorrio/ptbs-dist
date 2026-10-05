@@ -84,7 +84,7 @@ Allowed actions: `install-driver sx|lime`, `enable-service`, `restart-service`.
 
 ## Updating an existing PTBS install
 
-Prefer **System → Update** on the dashboard. That downloads the release binary and the voice library, checks SHA-256, and restarts. It does not compile. The loose `libtetra-codec.so` asset stays on the release through 0.5.3 so a 0.5.1 station can still update; the library is also inside the `.deb` from 0.5.2. Re-running `install-ptbs.sh` installs that package again and keeps `/etc/ptbs/config.toml`. To show the wizard again, set `"setup_complete": false` in `/etc/ptbs/setup.json`.
+Prefer **System → Update** on the dashboard. That downloads the release binary, checks SHA-256, and restarts. It does not compile. The voice library stays the one already installed from the package; from 0.5.4 the release no longer ships a loose `libtetra-codec.so`. Re-running `install-ptbs.sh` installs that package again and keeps `/etc/ptbs/config.toml`. To show the wizard again, set `"setup_complete": false` in `/etc/ptbs/setup.json`.
 
 Moving a 0.4.7 station: export `.bptbs` there, stop that station, install PTBS, import under **System → Backup**.
 

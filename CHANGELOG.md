@@ -2,6 +2,12 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.4 — Panel en el móvil
+
+En el móvil, «Datos de la estación TETRA» queda en su propia línea. Debajo van, cada una en la suya, las celdas vecinas y la retención. El texto de acceso de registro ya no se monta sobre la pastilla Abierto.
+
+- El release deja de incluir `libtetra-codec.so` suelto. La voz sigue dentro del paquete `.deb`. Una estación que ya tiene la librería no la vuelve a bajar al actualizar.
+
 ## v0.5.3 — Celdas vecinas aisladas
 
 Cada estación puede anunciar hasta siete celdas vecinas. El móvil ve esas portadoras y puede registrarse en ellas si el área de localización es distinta. No hay una gestión central: al salir de la celda, la llamada en curso se corta.

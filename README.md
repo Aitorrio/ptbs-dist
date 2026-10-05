@@ -502,7 +502,7 @@ Si el navegador no vuelve tras un reinicio, espera un minuto y recarga. En la Pi
 | Estable | `latest-stable` | Uso normal |
 | Beta | `latest-beta` | Probar lo último, sabiendo que puede cambiar |
 
-Esos dos son los únicos tags. Cada release incluye el paquete `ptbs_arm64.deb` (programa y codec de voz), el programa `ptbs`, la librería suelta `libtetra-codec.so` (puente de actualización hasta 0.5.3) y `ptbs.sha256`.
+Esos dos son los únicos tags. Cada release incluye el paquete `ptbs_arm64.deb` (programa y codec de voz), el programa `ptbs` y `ptbs.sha256`.
 
 ---
 
