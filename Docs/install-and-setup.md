@@ -78,9 +78,11 @@ The dashboard never runs free-form shell. Driver install and systemd ensure go t
 
 `/usr/local/sbin/ptbs-setup-helper.sh`
 
-Allowed actions: `install-driver sx|lime`, `enable-service`, `restart-service`.
+Allowed actions: `install-driver sx|lime|mucell`, `enable-service`, `restart-service`.
 
 **SXceiver (`sx`):** clones and builds [tejeez/sxxcvr](https://github.com/tejeez/sxxcvr) into `/opt/sxxcvr` (SoapySX module), then `ldconfig`. Override with `PTBS_SOAPY_SX_DIR` / `PTBS_SOAPY_SX_GIT` if needed. Hardware must be stacked on the Pi HAT for `SoapySDRUtil --find` / `--probe=driver=sx` to see it.
+
+**µCell (`mucell`):** clones [Jankyneering/mu-cell-bb-drivers](https://github.com/Jankyneering/mu-cell-bb-drivers) into `/opt/mu-cell-bb-drivers`, installs the `mu-cell-bb_raspberrypi` overlay and SoapyMuCell, then asks for a Pi reboot. The device string is `driver=mucell`. Override with `PTBS_MUCELL_DIR` / `PTBS_MUCELL_GIT`.
 
 ## Updating an existing PTBS install
 
