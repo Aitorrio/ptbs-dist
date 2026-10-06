@@ -152,7 +152,7 @@ Instala SoapySDR, que no va dentro del paquete. Hay una barra de progreso.
 
 ### 4. Seleccionar SDR
 
-Si Soapy ve una sola radio, queda elegida. Si ve varias, eliges. Si no ve ninguna (un HAT SXceiver a menudo no aparece hasta tener el driver), eliges SXceiver o Lime.
+Si Soapy ve una sola radio, queda elegida. Si ve varias, eliges. Si no ve ninguna (un HAT no aparece hasta tener su driver), eliges SXceiver, Lime o µCell. µCell no es un SXceiver: usa `driver=mucell` y, al terminar, la Pi se reinicia para cargar el overlay.
 
 ### 5. Driver
 

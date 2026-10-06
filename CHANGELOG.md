@@ -2,6 +2,13 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.5 — µCell en el asistente
+
+La placa [µCell BB](https://store.fredcorp.cc/shop/%CE%BCcell-bb-2) usa el driver `mucell`, no el del SXceiver. Si el escaneo no ve ninguna radio, el asistente ofrece SXceiver, Lime y µCell. Elegir una tarjeta ya no recarga el paso.
+
+- Instala el overlay y SoapyMuCell desde [mu-cell-bb-drivers](https://github.com/Jankyneering/mu-cell-bb-drivers). Al terminar, la Pi se reinicia para que el overlay cargue y la página vuelve sola.
+- La cadena que queda guardada es `driver=mucell`. Las ganancias de partida son las del SXceiver.
+
 ## v0.5.4 — Panel en el móvil
 
 En el móvil, «Datos de la estación TETRA» queda en su propia línea. Debajo van, cada una en la suya, las celdas vecinas y la retención. El texto de acceso de registro ya no se monta sobre la pastilla Abierto.
