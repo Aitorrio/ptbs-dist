@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.7 — Perfil nuevo
+
+Al añadir un perfil TMO Cell o Brew, el formulario sale vacío. Los números en gris son un ejemplo, no un valor. «Copiar de Vivo» sigue trayendo la config en vivo, y hay que guardar para conservarlo.
+
 ## v0.5.6 — Asistente
 
 La bienvenida, la comprobación de internet, SoapySDR, la elección de placa, el arranque automático y el cierre explican el paso con menos jerga.
