@@ -2,6 +2,16 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.6 — Asistente
+
+La bienvenida, la comprobación de internet, SoapySDR, la elección de placa, el arranque automático y el cierre explican el paso con menos jerga.
+
+«Valores de fábrica» pasa a ser «Configuración inicial». Se puede omitir, o introducir MCC, MNC, área, portadora y Brew. Eso se guarda en la config en vivo, no en un perfil.
+
+En un perfil TMO Cell o Brew, «Copiar de Vivo» rellena el formulario con lo que ese perfil admite de la config en vivo. Hay que guardar para conservarlo. Al editar, pide confirmación antes de pisar lo que ya hay.
+
+Añadir un perfil abre el formulario con valores de partida y el nombre vacío. No reutiliza el perfil elegido. Si ese nombre ya existe, no lo sobrescribe.
+
 ## v0.5.5 — µCell en el asistente
 
 La placa [µCell BB](https://store.fredcorp.cc/shop/%CE%BCcell-bb-2) usa el driver `mucell`, no el del SXceiver. Si el escaneo no ve ninguna radio, el asistente ofrece SXceiver, Lime y µCell. Elegir una tarjeta ya no recarga el paso.
