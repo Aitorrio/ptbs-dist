@@ -2,6 +2,12 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.9 — Gestión remota
+
+La estación puede unirse a un núcleo PTMS. En el panel está en Sistema → Gestión remota. En la config es `[gestion_remota]`: activado, host, puerto, nombre de celda y credencial. No entra en los perfiles TMO Cell ni en los de Brew.
+
+Con la gestión remota encendida, el enlace con el núcleo es solo PTCP y el perfil Brew no se usa para ese enlace. La estación manda su nombre y su credencial, recibe la ficha (identidad, vecinas y lista blanca) y la enseña. Esa ficha todavía no se aplica a la celda ni se anuncia en el aire. Si la gestión remota está apagada, la estación sigue como hasta ahora.
+
 ## v0.5.8 — Carga de la pila RTC
 
 En una Pi 5, Sensores del sistema puede encender o apagar la carga de la pila del reloj. Hay que elegir la pila: ML-2020 a 3,0 V o LIR2032 a 4,2 V. Sin pila detectada, la carga no se enciende. El ajuste se guarda y entra al reiniciar la Pi.

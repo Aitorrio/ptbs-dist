@@ -872,3 +872,17 @@ voice_service = true
 # auth_user = "ptbs"
 # password = ""
 # realm = "asterisk"
+
+###############################################################################
+
+# OPTIONAL: Gestión remota — PTCP session to a PTMS nucleus.
+# This is station-wide. It is not a TMO Cell profile and not a Core Net / Brew profile.
+# When enabled, the nucleus link is PTCP only; a [brew] section is not used for that link.
+# The received sheet is kept in memory for the dashboard. It is not applied on the air.
+#
+# [gestion_remota]
+# enabled = false
+# host = "127.0.0.1"
+# port = 7400
+# name = "Casa"
+# credential = ""
