@@ -2,6 +2,12 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.13 — La ficha ya no deja la estación sin panel
+
+Guardar las vecinas del núcleo encima de la lista que ya tenía la estación producía un TOML que no arrancaba. Sin ese fichero no salen el panel ni la radio. Esa escritura ya no se hace si el resultado no vuelve a parsear.
+
+Si el fichero principal quedó inválido y existe la copia anterior (`config.toml.ptms.bak`), el arranque la restaura y sigue.
+
 ## v0.5.12 — La celda unida no vuelve a administración local
 
 Al quedar unida, la estación recuerda que el núcleo administra la identidad, las vecinas y la lista blanca. Eso se ve en el panel y no se edita. Una caída del enlace, un rechazo momentáneo o un reinicio no devuelve esa config a la Pi. Se suelta al apagar PTMS en la propia estación.
