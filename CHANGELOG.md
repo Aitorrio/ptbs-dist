@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.10 — PTMS en el panel
+
+En Sistema, debajo de Red, está PTMS. Desde ahí se indica el núcleo, el puerto, el nombre de celda y la credencial. Al guardar, la estación abre la sesión PTCP sin reiniciar. La ficha se muestra en la misma página.
+
 ## v0.5.9 — Gestión remota
 
 La estación puede unirse a un núcleo PTMS. En el panel está en Sistema → Gestión remota. En la config es `[gestion_remota]`: activado, host, puerto, nombre de celda y credencial. No entra en los perfiles TMO Cell ni en los de Brew.
