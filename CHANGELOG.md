@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.8 — Carga de la pila RTC
+
+En una Pi 5, Sensores del sistema puede encender o apagar la carga de la pila del reloj. Hay que elegir la pila: ML-2020 a 3,0 V o LIR2032 a 4,2 V. Sin pila detectada, la carga no se enciende. El ajuste se guarda y entra al reiniciar la Pi.
+
 ## v0.5.7 — Perfil nuevo
 
 Al añadir un perfil TMO Cell o Brew, el formulario sale vacío. Los números en gris son un ejemplo, no un valor. «Copiar de Vivo» sigue trayendo la config en vivo, y hay que guardar para conservarlo.
