@@ -2,6 +2,20 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.5.12 — La celda unida no vuelve a administración local
+
+Al quedar unida, la estación recuerda que el núcleo administra la identidad, las vecinas y la lista blanca. Eso se ve en el panel y no se edita. Una caída del enlace, un rechazo momentáneo o un reinicio no devuelve esa config a la Pi. Se suelta al apagar PTMS en la propia estación.
+
+Ethernet, el SDR, la pila del reloj, la cuenta del panel y la actualización siguen editándose aquí. Guardar la gestión remota sin que el núcleo conteste no administra la celda.
+
+Al aplicar la ficha, la estación se la confirma al núcleo. Si no coincide, el panel de PTMS la marca no conforme.
+
+## v0.5.11 — La ficha del núcleo sale al aire
+
+Con la sesión PTCP unida, la estación anuncia la ficha que manda el núcleo: identidad, vecinas y lista blanca. Las vecinas salen en el siguiente `D-NWRK-BROADCAST`, con salto no anunciado, igual que las celdas vecinas aisladas. La lista blanca entra al momento; vacía sigue siendo red abierta.
+
+Si el MCC, el MNC, el área, el colour code o la portadora no coinciden con lo que ya está en el aire, la estación guarda la ficha y se reinicia para anunciarla. Con dos portadoras activas no se retoca el sintonizador.
+
 ## v0.5.10 — PTMS en el panel
 
 En Sistema, debajo de Red, está PTMS. Desde ahí se indica el núcleo, el puerto, el nombre de celda y la credencial. Al guardar, la estación abre la sesión PTCP sin reiniciar. La ficha se muestra en la misma página.
