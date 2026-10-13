@@ -2,6 +2,12 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.1 — Aplicar no cierra el panel
+
+Aplicar deja de reiniciar las cuatro unidades. La página sigue. Vecinas, identidad, lista blanca y el resto entran en el aire. Un cambio de SDR, de tasa, de portadora, de dúplex o de Brew recicla solo el aire.
+
+PTMS se aplica en el enlace, no en el panel. El formulario muestra la sesión de ese enlace. Reiniciar, en Sistema, sigue siendo el que para las cuatro unidades. Cambiar el puerto del panel recarga la página; la radio sigue.
+
 ## v0.6.0 — La estación ya no es un solo proceso
 
 El panel, el enlace con PTMS, la sincronización y el aire son cuatro unidades. Si la radio cae, el panel y la sesión siguen. Si caen ellos, la celda sigue con el último ajuste aplicado.
