@@ -2,6 +2,16 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.0 — La estación ya no es un solo proceso
+
+El panel, el enlace con PTMS, la sincronización y el aire son cuatro unidades. Si la radio cae, el panel y la sesión siguen. Si caen ellos, la celda sigue con el último ajuste aplicado.
+
+La sincronización es la única que escribe la configuración. Un documento que no arrancaría no sustituye al que está emitiendo. Vecinas, lista blanca, identidad y la portadora de más (si está en modo bajo demanda) entran sin reiniciar la estación. Un cambio de SDR, de tasa de muestreo o de portadora principal recicla solo el aire.
+
+Con PTMS enganchado, el registro, la llamada, la voz, el SDS y el aviso de cambio de celda llegan al aire. Sin PTMS, la celda sigue sola o por Brew. El panel muestra el modo de la celda y las alarmas activas, y no da un cambio por hecho hasta que el aire lo confirma.
+
+Reiniciar desde el panel recicla las cuatro unidades. Parar en suave deja el panel y detiene el aire. El micrófono de la consola local sigue en el aire: el PTT de esa página del panel todavía no cruza al proceso de la radio.
+
 ## v0.5.13 — La ficha ya no deja la estación sin panel
 
 Guardar las vecinas del núcleo encima de la lista que ya tenía la estación producía un TOML que no arrancaba. Sin ese fichero no salen el panel ni la radio. Esa escritura ya no se hace si el resultado no vuelve a parsear.
