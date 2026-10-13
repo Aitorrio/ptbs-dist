@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.2 — Aplicar muestra los parámetros
+
+Aplicar ya no se queda en «el aire no lo confirma». En cuanto la estación acepta el cambio, la ficha muestra MCC, MNC, portadora, frecuencias, vecinas y lista de acceso. La franja de arriba enseña la identidad que está radiando. El aviso de que el aire se recicla se apaga cuando la radio vuelve a responder.
+
 ## v0.6.1 — Aplicar no cierra el panel
 
 Aplicar deja de reiniciar las cuatro unidades. La página sigue. Vecinas, identidad, lista blanca y el resto entran en el aire. Un cambio de SDR, de tasa, de portadora, de dúplex o de Brew recicla solo el aire.
