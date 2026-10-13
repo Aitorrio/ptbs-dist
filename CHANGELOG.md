@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.3 — El panel sigue al aire
+
+Reciclar la radio ya no deja el panel en «en espera». Ese aviso solo sale si paras la radio desde el panel. La franja, el aviso de RF y la pastilla de la izquierda muestran lo que está radiando: si Brew está arriba se ve, y si no está configurado Salud no dice que el enlace está conectado. Al caer el aire se borra el espectro y las radios de la sesión anterior; al volver, el MCCH y el resto salen de la misma foto.
+
 ## v0.6.2 — Aplicar muestra los parámetros
 
 Aplicar ya no se queda en «el aire no lo confirma». En cuanto la estación acepta el cambio, la ficha muestra MCC, MNC, portadora, frecuencias, vecinas y lista de acceso. La franja de arriba enseña la identidad que está radiando. El aviso de que el aire se recicla se apaga cuando la radio vuelve a responder.
