@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.9 — Expulsar llega a la celda
+
+La orden de expulsar solo estaba enchufada con el núcleo PTCP. Con Brew, con el despacho o en solitario se perdía, y la lista blanca en caliente tampoco podía echar al que ya estaba registrado. Ahora la celda la recibe siempre y manda al terminal a registrarse otra vez.
+
 ## v0.6.8 — Los cambios en caliente llegan al aire
 
 La lista blanca se aplica en el aire y echa a los ISSI que ya no caben. La ficha de acceso lee esa misma lista. El tope de registros sigue al cambio sin reiniciar. PPM, ganancias y antenas reciclan el aire, porque el SDR solo las lee al abrirse.
