@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.11 — Iniciar no reinicia el panel
+
+Suspender para el aire y el panel sigue. Iniciar arranca otra vez esa unidad, sin la pantalla de «Reiniciando…». Si esa pantalla se abre y el panel no se va, se cierra sola.
+
 ## v0.6.10 — U-Status vuelve a su sitio
 
 En Sistema, el control remoto queda debajo del acceso al panel y la copia de seguridad al final. La tarjeta recupera la fila de código, acción y quitar, también en el móvil. Desaparece la lista vieja de perfiles de config: los perfiles de verdad siguen en Configuración. Un cambio en caliente que no entra en el aire deja rastro en el registro, y expulsar ya no puede trabarse con el candado de la lista.
