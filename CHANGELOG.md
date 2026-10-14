@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.5 — Conexión, portadora bajo demanda y celda gestionada
+
+Cerrar la página ya no pinta el enlace como caído. La tarjeta se llama Conexión y, debajo, dice si el protocolo es Brew o PTCP. La franja deja de repetir la portadora extra y la identidad. Reiniciar y actualizar recargan la página cuando vuelve el panel. Dentro de doble portadora, «Solo cuando hay uso» enciende la extra con la llamada y la apaga al quedar libre. Con la celda en PTMS no se editan DGNA, las integraciones, el despacho ni Configuración. U-Status pasa a Sistema y sigue disponible. La difusión de SDS en vivo pasa a Configuración.
+
 ## v0.6.4 — La ficha, el punto y el registro coinciden
 
 El punto del perfil aplicado se actualiza al pulsar Aplicar, sin recargar la página. La ficha de Brew sigue la misma foto que la franja: si el enlace está arriba, no dice «sin conexión». El registro en vivo vuelve a mostrar las líneas del aire.
