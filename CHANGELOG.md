@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.7 — El estado del aire vive en la barra
+
+El aviso «RF apagada: el aire se está refrescando» desaparece. El estado del aire queda en la fila donde antes ponía SDR, y en ningún otro sitio. Aplicar confirma con «Aplicado, en el aire.» bajo la barra, sin el texto verde de los perfiles. El config.toml en bruto se guarda y se aplica con un solo botón.
+
 ## v0.6.6 — La consola LST vuelve, y Aplicar avisa
 
 La consola LST del panel habla con la consola del aire. Con el perfil Despacho LST seleccionado vuelve a abrirse. La franja de «Sola, en el aire» desaparece. Aplicar deja el botón en «Aplicando…» con el círculo de espera y, al terminar, un aviso en la esquina superior derecha: verde si entró, rojo si no.
