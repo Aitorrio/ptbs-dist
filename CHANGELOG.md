@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.8 — Los cambios en caliente llegan al aire
+
+La lista blanca se aplica en el aire y echa a los ISSI que ya no caben. La ficha de acceso lee esa misma lista. El tope de registros sigue al cambio sin reiniciar. PPM, ganancias y antenas reciclan el aire, porque el SDR solo las lee al abrirse.
+
 ## v0.6.7 — El estado del aire vive en la barra
 
 El aviso «RF apagada: el aire se está refrescando» desaparece. El estado del aire queda en la fila donde antes ponía SDR, y en ningún otro sitio. Aplicar confirma con «Aplicado, en el aire.» bajo la barra, sin el texto verde de los perfiles. El config.toml en bruto se guarda y se aplica con un solo botón.
