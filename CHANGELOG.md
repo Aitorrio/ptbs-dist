@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.4 — La ficha, el punto y el registro coinciden
+
+El punto del perfil aplicado se actualiza al pulsar Aplicar, sin recargar la página. La ficha de Brew sigue la misma foto que la franja: si el enlace está arriba, no dice «sin conexión». El registro en vivo vuelve a mostrar las líneas del aire.
+
 ## v0.6.3 — El panel sigue al aire
 
 Reciclar la radio ya no deja el panel en «en espera». Ese aviso solo sale si paras la radio desde el panel. La franja, el aviso de RF y la pastilla de la izquierda muestran lo que está radiando: si Brew está arriba se ve, y si no está configurado Salud no dice que el enlace está conectado. Al caer el aire se borra el espectro y las radios de la sesión anterior; al volver, el MCCH y el resto salen de la misma foto.
