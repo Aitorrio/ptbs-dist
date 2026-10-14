@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.6 — La consola LST vuelve, y Aplicar avisa
+
+La consola LST del panel habla con la consola del aire. Con el perfil Despacho LST seleccionado vuelve a abrirse. La franja de «Sola, en el aire» desaparece. Aplicar deja el botón en «Aplicando…» con el círculo de espera y, al terminar, un aviso en la esquina superior derecha: verde si entró, rojo si no.
+
 ## v0.6.5 — Conexión, portadora bajo demanda y celda gestionada
 
 Cerrar la página ya no pinta el enlace como caído. La tarjeta se llama Conexión y, debajo, dice si el protocolo es Brew o PTCP. La franja deja de repetir la portadora extra y la identidad. Reiniciar y actualizar recargan la página cuando vuelve el panel. Dentro de doble portadora, «Solo cuando hay uso» enciende la extra con la llamada y la apaga al quedar libre. Con la celda en PTMS no se editan DGNA, las integraciones, el despacho ni Configuración. U-Status pasa a Sistema y sigue disponible. La difusión de SDS en vivo pasa a Configuración.
