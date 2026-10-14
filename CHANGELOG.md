@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.10 — U-Status vuelve a su sitio
+
+En Sistema, el control remoto queda debajo del acceso al panel y la copia de seguridad al final. La tarjeta recupera la fila de código, acción y quitar, también en el móvil. Desaparece la lista vieja de perfiles de config: los perfiles de verdad siguen en Configuración. Un cambio en caliente que no entra en el aire deja rastro en el registro, y expulsar ya no puede trabarse con el candado de la lista.
+
 ## v0.6.9 — Expulsar llega a la celda
 
 La orden de expulsar solo estaba enchufada con el núcleo PTCP. Con Brew, con el despacho o en solitario se perdía, y la lista blanca en caliente tampoco podía echar al que ya estaba registrado. Ahora la celda la recibe siempre y manda al terminal a registrarse otra vez.
