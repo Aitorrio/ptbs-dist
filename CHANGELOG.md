@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.14 — El núcleo se ve, y se puede volver a aprovisionar
+
+La tarjeta del núcleo deja de ser tres líneas. Enseña señalización, SDS, voz y si la celda está conforme con la ficha. Aprovisionar vuelve a escribir esa ficha; el enlace lo comprueba solo cada medio minuto. El icono de PTMS ya no es el de Red.
+
 ## v0.6.13 — Con el núcleo, Inicio enseña el enlace
 
 Si la celda la lleva el PTMS, la tarjeta de perfiles de Inicio pasa a mostrar el núcleo, el estado y si la ficha está al día. DGNA, las integraciones, el despacho y Configuración quedan en una página en blanco con el aviso en el centro. La franja azul desaparece.
