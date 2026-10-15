@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.12 — La BS vuelve al salir de la suspensión
+
+Al iniciar, el aire y Brew ya se veían, pero la conexión de la BS se quedaba apagada hasta recargar. El panel no se había ido: solo faltaba encender otra vez esa lámpara.
+
 ## v0.6.11 — Iniciar no reinicia el panel
 
 Suspender para el aire y el panel sigue. Iniciar arranca otra vez esa unidad, sin la pantalla de «Reiniciando…». Si esa pantalla se abre y el panel no se va, se cierra sola.
