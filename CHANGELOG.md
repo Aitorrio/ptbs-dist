@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.13 — Con el núcleo, Inicio enseña el enlace
+
+Si la celda la lleva el PTMS, la tarjeta de perfiles de Inicio pasa a mostrar el núcleo, el estado y si la ficha está al día. DGNA, las integraciones, el despacho y Configuración quedan en una página en blanco con el aviso en el centro. La franja azul desaparece.
+
 ## v0.6.12 — La BS vuelve al salir de la suspensión
 
 Al iniciar, el aire y Brew ya se veían, pero la conexión de la BS se quedaba apagada hasta recargar. El panel no se había ido: solo faltaba encender otra vez esa lámpara.
