@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.15 — La celda informa al núcleo
+
+Cada 15 segundos, y al momento si cambia el aire, el cumplimiento o una alarma, la estación manda por PTCP cómo está: si es conforme y por qué, la radio, cuántas radios y llamadas hay, la salud, las IP y la temperatura.
+
 ## v0.6.14 — El núcleo se ve, y se puede volver a aprovisionar
 
 La tarjeta del núcleo deja de ser tres líneas. Enseña señalización, SDS, voz y si la celda está conforme con la ficha. Aprovisionar vuelve a escribir esa ficha; el enlace lo comprueba solo cada medio minuto. El icono de PTMS ya no es el de Red.
