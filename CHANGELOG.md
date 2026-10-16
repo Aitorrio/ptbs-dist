@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.16 — Sin centralita en la celda
+
+La celda ya no lleva centralita SIP ni avisos a teléfonos Snom. La voz y la señalización salen solo por Brew o por PTCP.
+
 ## v0.6.15 — La celda informa al núcleo
 
 Cada 15 segundos, y al momento si cambia el aire, el cumplimiento o una alarma, la estación manda por PTCP cómo está: si es conforme y por qué, la radio, cuántas radios y llamadas hay, la salud, las IP y la temperatura.
