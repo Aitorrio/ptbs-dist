@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.17 — El texto llega limpio y la segunda portadora no se confunde
+
+Un SDS de texto del panel, de DAPNET o de una alarma ya no muestra un recuadro al principio. En una celda de dos portadoras, la primera deja de salir deformada. Un acceso que se cuela en la segunda sin llamada ya no se contesta, y el terminal no se registra en bucle; si ese intervalo tiene una llamada, la señalización sigue. Si Brew rechaza una orden, el registro enseña el motivo y no solo el tamaño.
+
 ## v0.6.16 — Sin centralita en la celda
 
 La celda ya no lleva centralita SIP ni avisos a teléfonos Snom. La voz y la señalización salen solo por Brew o por PTCP.
