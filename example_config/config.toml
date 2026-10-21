@@ -406,21 +406,24 @@ voice_service = true
 
 # OPTIONAL: Restart recovery (PTBS)
 #
-# After the BS process restarts (update / crash / service restart) the in-RAM registry is
-# empty, yet radios are still RF-camped on the cell — so the first group PTT fails until each
-# radio re-registers on its own (often only on power-cycle). When enabled, PTBS persists
-# a small JSON cache of known terminals (ISSI + persistent groups + energy mode) and, on the
-# next startup, proactively sends D-LOCATION-UPDATE-COMMAND (ETSI EN 300 392-2 §16.4.4) to each,
-# forcing re-registration + group re-report so PTT works again within seconds, no human action.
+# After the radio service restarts (update, crash, or an air-only recycle) the in-RAM
+# registry is empty. The panel and the network link can stay up; the registry does not.
+# Radios may still be RF-camped and believe they are registered, so the first group PTT
+# fails until each radio re-registers on its own (often only on power-cycle). When enabled,
+# PTBS persists a small JSON cache of known terminals (ISSI + persistent groups + energy
+# mode) and, when the radio service starts, proactively sends D-LOCATION-UPDATE-COMMAND
+# (ETSI EN 300 392-2 §16.4.4) to each, forcing re-registration + group re-report so PTT
+# works again within seconds, no human action. This does not answer a group-attach PDU
+# that arrived cut off; that path confirms groups already known and asks for a group report.
 #
-# The proactive cache replay is OFF by default: keying COMMANDs at a batch of ISSIs right after
-# boot adds MCCH load, so it is opt-in. Pairs with cell_info.periodic_registration_secs (T351).
+# The proactive cache replay is OFF by default: keying COMMANDs at a batch of ISSIs when the
+# radio service starts adds MCCH load, so it is opt-in. Pairs with cell_info.periodic_registration_secs (T351).
 #
 # A second, lighter mechanism — reactive_enabled — is ON by default and needs no cache: it watches
 # the uplink and, the moment an unknown but network-permitted radio transmits (any PTT/SDS/random
 # access), keys it one rate-limited D-LOCATION-UPDATE-COMMAND to force re-registration. It fires
 # only in response to a radio that is demonstrably present, so it is RF-cheap and heals the common
-# "PTT does nothing after a BS restart" case the cache can miss. Honours the same whitelist /
+# "PTT does nothing after the radio service restarts" case the cache can miss. Honours the same whitelist /
 # issi_allowlist scoping. Set reactive_enabled = false to disable.
 #
 # [recovery]

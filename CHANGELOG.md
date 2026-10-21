@@ -2,6 +2,12 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.20 — Tras reiniciar la radio, el grupo sigue confirmado
+
+Si la lista de grupos no cabe en un mensaje, la estación confirma los grupos que ya aceptó en el registro y pide el resto en trozos. El walkie no se queda sin oír el grupo en el que estaba, y no hace falta cambiar de grupo y volver.
+
+La ayuda de la recuperación aclara que el registro vive en el servicio de radio. Reiniciar solo ese servicio lo vacía aunque el panel y el enlace sigan. La casilla proactiva sigue apagada. La reactiva, encendida, pide el registro cuando el walkie transmite.
+
 ## v0.6.19 — Cada enlace enseña su MAC
 
 En Red, cada tarjeta de interfaz muestra la dirección MAC debajo del nombre y antes del estado.
