@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.19 — Cada enlace enseña su MAC
+
+En Red, cada tarjeta de interfaz muestra la dirección MAC debajo del nombre y antes del estado.
+
 ## v0.6.18 — En el móvil, Inicio vuelve a ocupar la tarjeta
 
 En Inicio, los perfiles rápidos y los botones Aplicar y Más ajustes ocupan otra vez todo el ancho de la tarjeta. Ya no se quedan en una columna estrecha a la izquierda.
