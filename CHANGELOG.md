@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.18 — En el móvil, Inicio vuelve a ocupar la tarjeta
+
+En Inicio, los perfiles rápidos y los botones Aplicar y Más ajustes ocupan otra vez todo el ancho de la tarjeta. Ya no se quedan en una columna estrecha a la izquierda.
+
 ## v0.6.17 — El texto llega limpio y la segunda portadora no se confunde
 
 Un SDS de texto del panel, de DAPNET o de una alarma ya no muestra un recuadro al principio. En una celda de dos portadoras, la primera deja de salir deformada. Un acceso que se cuela en la segunda sin llamada ya no se contesta, y el terminal no se registra en bucle; si ese intervalo tiene una llamada, la señalización sigue. Si Brew rechaza una orden, el registro enseña el motivo y no solo el tamaño.
