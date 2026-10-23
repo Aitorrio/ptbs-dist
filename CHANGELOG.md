@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.26 — El SDS retenido sale cuando el walkie ya escucha
+
+Un SDS guardado espera a que el walkie termine de registrarse y sale en la trama en la que está escuchando. El registro pasa a enviado en ese momento. Un silencio del enlace entre el panel y la radio ya no se toma por una desconexión.
+
 ## v0.6.25 — El retén de SDS ya no corta el envío
 
 Activar o desactivar el retén solo cambia esa sección de la configuración. El SDS sigue saliendo, y apagar el retén no deja el envío mudo hasta reiniciar. En el despacho, la lista de SDS se actualiza sola mientras la página está abierta.
