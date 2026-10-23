@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.22 — El SDS del panel queda anotado al enviarlo
+
+Al mandar un SDS desde el panel, la fila aparece al momento en el registro y en la lista del despacho, también si sale como 9999. La orden ya no se pierde si el enlace con el servicio de radio se reconecta.
+
 ## v0.6.21 — El SDS del despacho llega y se lee la conversación
 
 Un SDS desde Inicio o desde el despacho espera a que el walkie vuelva al canal de control, también con el grupo en llamada. Al grupo le llega una copia a cada radio afiliada.
