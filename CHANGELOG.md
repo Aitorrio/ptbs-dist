@@ -2,6 +2,12 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.21 — El SDS del despacho llega y se lee la conversación
+
+Un SDS desde Inicio o desde el despacho espera a que el walkie vuelva al canal de control, también con el grupo en llamada. Al grupo le llega una copia a cada radio afiliada.
+
+En el despacho, la lista se llama SDS y muestra lo que envías junto a lo que recibes. El registro distingue enviado, entregado y rechazado según el acuse del walkie.
+
 ## v0.6.20 — Tras reiniciar la radio, el grupo sigue confirmado
 
 Si la lista de grupos no cabe en un mensaje, la estación confirma los grupos que ya aceptó en el registro y pide el resto en trozos. El walkie no se queda sin oír el grupo en el que estaba, y no hace falta cambiar de grupo y volver.
