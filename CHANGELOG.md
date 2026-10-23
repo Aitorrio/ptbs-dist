@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.23 — El SDS distingue entregado, leído e inalcanzable
+
+El registro y el despacho marcan enviado, entregado, leído, inalcanzable y rechazado según el informe del walkie. Entregado es que lo recibió; leído, que lo abrió. Un acuse de recepción posterior no quita el leído. Inalcanzable es que el ISSI no está registrado, el grupo no tiene nadie afiliado, o el walkie no volvió al canal de control a tiempo. Rechazado es que el walkie estaba y lo rechazó, por memoria llena o por codificación.
+
 ## v0.6.22 — El SDS del panel queda anotado al enviarlo
 
 Al mandar un SDS desde el panel, la fila aparece al momento en el registro y en la lista del despacho, también si sale como 9999. La orden ya no se pierde si el enlace con el servicio de radio se reconecta.
