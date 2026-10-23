@@ -2,6 +2,12 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.24 — El SDS espera al walkie que ya estuvo aquí
+
+Un SDS a un ISSI que no está en línea se guarda si ese ISSI ya se registró en esta celda, y sale cuando vuelve a registrarse. Si nunca estuvo aquí, queda inalcanzable. El retén se enciende en Configuración: tiempo de guarda, ISSI vistos, mensajes retenidos y vaciar el depósito. El ajuste viaja en el .bptbs y no va ligado a los perfiles. Con PTMS unido, la celda no retiene.
+
+Un walkie en ahorro de energía solo escucha a ratos. El SDS sale en uno de esos momentos. Si aun así no confirma la trama, el registro pasa a inalcanzable.
+
 ## v0.6.23 — El SDS distingue entregado, leído e inalcanzable
 
 El registro y el despacho marcan enviado, entregado, leído, inalcanzable y rechazado según el informe del walkie. Entregado es que lo recibió; leído, que lo abrió. Un acuse de recepción posterior no quita el leído. Inalcanzable es que el ISSI no está registrado, el grupo no tiene nadie afiliado, o el walkie no volvió al canal de control a tiempo. Rechazado es que el walkie estaba y lo rechazó, por memoria llena o por codificación.

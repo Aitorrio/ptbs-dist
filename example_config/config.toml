@@ -437,6 +437,10 @@ voice_service = true
 # reactive_enabled = true         # command unknown radios to re-register on sight (default true)
 # reactive_cooldown_secs = 10     # min gap between reactive COMMANDs to the same ISSI (2..=120)
 
+# [sds_retain]
+# enabled = false                 # hold an individual SDS for a radio that has registered here before
+# retain_hours = 24               # 1..=168. Not a Cell/Brew profile field; a .bptbs restores it
+
 ###############################################################################
 
 # OPTIONAL: Lite stack-health monitor (PTBS)
