@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.25 — El retén de SDS ya no corta el envío
+
+Activar o desactivar el retén solo cambia esa sección de la configuración. El SDS sigue saliendo, y apagar el retén no deja el envío mudo hasta reiniciar. En el despacho, la lista de SDS se actualiza sola mientras la página está abierta.
+
 ## v0.6.24 — El SDS espera al walkie que ya estuvo aquí
 
 Un SDS a un ISSI que no está en línea se guarda si ese ISSI ya se registró en esta celda, y sale cuando vuelve a registrarse. Si nunca estuvo aquí, queda inalcanzable. El retén se enciende en Configuración: tiempo de guarda, ISSI vistos, mensajes retenidos y vaciar el depósito. El ajuste viaja en el .bptbs y no va ligado a los perfiles. Con PTMS unido, la celda no retiene.
