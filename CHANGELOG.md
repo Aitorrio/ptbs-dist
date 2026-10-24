@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.30 — La página PTMS cabe en la pantalla
+
+El formulario de PTMS ya no se estira hasta el borde. En el ordenador queda en una columna con margen. En el móvil cada campo ocupa su línea y el texto no se sale de la pantalla.
+
 ## v0.6.28 — El registro sigue el acuse de Brew
 
 Un SDS de walkie a walkie que sale por Brew queda enviado hasta que vuelve el informe. Si Brew confirma la entrega, pasa a entregado o leído y no se guarda. Si no confirma en medio minuto, o confirma que no se entregó, se retiene cuando ese ISSI sigue dentro de las horas. Si no sigue en esa ventana, queda inalcanzable. La casilla de copia ya no está.
