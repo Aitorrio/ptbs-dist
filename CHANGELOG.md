@@ -4,7 +4,7 @@ Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu v
 
 ## v0.6.30 — La página PTMS cabe en la pantalla
 
-El formulario de PTMS ya no se estira hasta el borde. En el ordenador queda en una columna con margen. En el móvil cada campo ocupa su línea y el texto no se sale de la pantalla.
+El formulario de PTMS ya no se estira hasta el borde. En el ordenador las tarjetas usan el ancho de la página y los campos quedan con margen. En el móvil cada campo ocupa su línea y el texto no se sale de la pantalla.
 
 ## v0.6.28 — El registro sigue el acuse de Brew
 
