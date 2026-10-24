@@ -2,6 +2,228 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.30 — El núcleo lleva la celda
+
+Desde 0.5.5 la estación pasa a cuatro unidades, el núcleo PTMS administra la celda y el SDS dice si el walkie lo recibió. Esto es el resultado. Las notas de más abajo cuentan cada corte.
+
+La estación son cuatro unidades: el panel, el enlace con el núcleo, la sincronización y el aire. Si la radio cae, el panel sigue. Aplicar ya no reinicia las cuatro ni cierra la página.
+
+- Vecinas, identidad, lista blanca y la portadora extra, cuando está en «Solo cuando hay uso», entran sin tirar la estación.
+- Un cambio de SDR, de tasa, de portadora principal, de dúplex, de Brew, de PPM, de ganancias o de antenas recicla solo el aire.
+- Reiniciar, en Sistema, para las cuatro. Parar en suave deja el panel y detiene el aire. Iniciar levanta otra vez el aire, sin la pantalla de «Reiniciando…».
+- Una configuración que no arrancaría no sustituye a la que está emitiendo. Si el fichero quedó inválido y existe la copia anterior, el arranque la restaura.
+
+El núcleo administra la identidad, las vecinas y la lista blanca, y la estación las anuncia en el aire.
+
+- En PTMS se indican el host, el puerto, el nombre de celda y la credencial. Al guardar se abre la sesión sin reiniciar el panel.
+- Si el MCC, el MNC, el área, el colour code o la portadora no coinciden con lo que ya está en el aire, guarda la ficha y se reinicia para anunciarla. Con dos portadoras no se retoca el sintonizador.
+- Mientras está unida no se editan DGNA, las integraciones, el despacho ni Configuración. U-Status sigue en Sistema. Ethernet, el SDR, la pila del reloj, la cuenta del panel y la actualización se siguen editando aquí.
+- Se suelta al apagar PTMS en la propia estación. Una caída del enlace, un rechazo o un reinicio no devuelven esa administración a la Pi.
+- Inicio enseña el núcleo, el estado y si la ficha está al día. La página de PTMS muestra señalización, SDS, voz y si la celda es conforme. Aprovisionar vuelve a escribir la ficha.
+- Cada 15 segundos, y al momento si cambia el aire, el cumplimiento o una alarma, la estación informa al núcleo.
+- En el ordenador esa página usa el ancho de la pantalla y los campos quedan con margen. En el móvil cada campo va en su línea.
+
+La voz ya no pasa por centralita. No hay SIP ni teléfonos Snom: sale por Brew o por PTCP.
+
+- La consola LST del panel vuelve a hablar con la del aire cuando el perfil Despacho LST está seleccionado.
+- «Solo cuando hay uso» enciende la portadora extra con la llamada y la apaga al quedar libre.
+- Si la lista de grupos no cabe en un mensaje, la estación confirma los grupos ya aceptados y pide el resto. El walkie sigue oyendo el grupo en el que estaba después de reiniciar la radio.
+- La recuperación proactiva sigue apagada. La reactiva, encendida, pide el registro cuando el walkie transmite.
+
+El SDS espera al walkie y el registro dice en qué quedó.
+
+- Al enviarlo desde el panel o el despacho, la fila aparece al momento. Sale cuando el walkie vuelve al canal de control, también con el grupo en llamada. Al grupo le llega una copia a cada radio afiliada.
+- El estado puede ser enviado, entregado, leído, inalcanzable o rechazado. Entregado es que lo recibió. Leído, que lo abrió. Un acuse posterior no quita el leído. Inalcanzable es que el ISSI no está registrado, el grupo no tiene nadie, o el walkie no volvió al canal a tiempo. Rechazado es que estaba y lo rechazó.
+- Un SDS a un ISSI que estuvo en esta celda dentro de las horas de retención se guarda y sale cuando vuelve a registrarse, en la trama en la que está escuchando. Si nunca estuvo, o ese tiempo ya pasó, queda inalcanzable. Esas horas son la vida del mensaje y la ventana de «estuvo aquí». El grupo no se guarda. Con PTMS unido, la celda no retiene.
+- De walkie a walkie, si el destino no está en la celda, se entrega a Brew. Si Brew confirma la entrega, queda entregado o leído y no se guarda. Si no confirma en medio minuto, o confirma que no se entregó, se retiene cuando ese ISSI sigue dentro de las horas. Si no, queda inalcanzable.
+- El mapa de ubicación muestra las posiciones LIP que el registro recibe.
+
+Otras diferencias al pasar de 0.5.5.
+
+- La tarjeta se llama Conexión y dice si el protocolo es Brew o PTCP. El estado del aire está en la barra. Aplicar confirma con «Aplicado, en el aire.»
+- En Red, cada interfaz muestra su MAC. Expulsar llega a la celda también con Brew, con el despacho o en solitario. La lista blanca en caliente echa a los ISSI que ya no caben.
+- Un SDS de texto del panel, de DAPNET o de una alarma ya no muestra un recuadro al principio. En dos portadoras, un acceso que se cuela en la segunda sin llamada no se contesta. Si Brew rechaza una orden, el registro enseña el motivo.
+- Un perfil nuevo sale vacío. «Configuración inicial» se puede omitir. En una Pi 5, Sensores del sistema puede cargar la pila del reloj, ML-2020 o LIR2032.
+- En el móvil, los perfiles rápidos de Inicio ocupan otra vez todo el ancho de la tarjeta.
+
+## v0.6.28 — El registro sigue el acuse de Brew
+
+Un SDS de walkie a walkie que sale por Brew queda enviado hasta que vuelve el informe. Si Brew confirma la entrega, pasa a entregado o leído y no se guarda. Si no confirma en medio minuto, o confirma que no se entregó, se retiene cuando ese ISSI sigue dentro de las horas. Si no sigue en esa ventana, queda inalcanzable. La casilla de copia ya no está.
+
+## v0.6.27 — El SDS entre walkies y el mapa LIP
+
+Un SDS de un walkie a otro, si el destino no está en la celda, se entrega a Brew y queda enviado. Si Brew no lo acepta y ese ISSI estuvo aquí dentro de las horas de retención, se guarda hasta que vuelva. Si nunca estuvo, o ese tiempo ya pasó, queda inalcanzable. Esas horas son también la ventana en la que el ISSI cuenta como visto. La casilla nueva guarda además una copia cuando Brew acepta y no confirma. El mapa de ubicación vuelve a mostrar las posiciones LIP que el registro ya recibe.
+
+## v0.6.26 — El SDS retenido sale cuando el walkie ya escucha
+
+Un SDS guardado espera a que el walkie termine de registrarse y sale en la trama en la que está escuchando. El registro pasa a enviado en ese momento. Un silencio del enlace entre el panel y la radio ya no se toma por una desconexión.
+
+## v0.6.25 — El retén de SDS ya no corta el envío
+
+Activar o desactivar el retén solo cambia esa sección de la configuración. El SDS sigue saliendo, y apagar el retén no deja el envío mudo hasta reiniciar. En el despacho, la lista de SDS se actualiza sola mientras la página está abierta.
+
+## v0.6.24 — El SDS espera al walkie que ya estuvo aquí
+
+Un SDS a un ISSI que no está en línea se guarda si ese ISSI ya se registró en esta celda, y sale cuando vuelve a registrarse. Si nunca estuvo aquí, queda inalcanzable. El retén se enciende en Configuración: tiempo de guarda, ISSI vistos, mensajes retenidos y vaciar el depósito. El ajuste viaja en el .bptbs y no va ligado a los perfiles. Con PTMS unido, la celda no retiene.
+
+Un walkie en ahorro de energía solo escucha a ratos. El SDS sale en uno de esos momentos. Si aun así no confirma la trama, el registro pasa a inalcanzable.
+
+## v0.6.23 — El SDS distingue entregado, leído e inalcanzable
+
+El registro y el despacho marcan enviado, entregado, leído, inalcanzable y rechazado según el informe del walkie. Entregado es que lo recibió; leído, que lo abrió. Un acuse de recepción posterior no quita el leído. Inalcanzable es que el ISSI no está registrado, el grupo no tiene nadie afiliado, o el walkie no volvió al canal de control a tiempo. Rechazado es que el walkie estaba y lo rechazó, por memoria llena o por codificación.
+
+## v0.6.22 — El SDS del panel queda anotado al enviarlo
+
+Al mandar un SDS desde el panel, la fila aparece al momento en el registro y en la lista del despacho, también si sale como 9999. La orden ya no se pierde si el enlace con el servicio de radio se reconecta.
+
+## v0.6.21 — El SDS del despacho llega y se lee la conversación
+
+Un SDS desde Inicio o desde el despacho espera a que el walkie vuelva al canal de control, también con el grupo en llamada. Al grupo le llega una copia a cada radio afiliada.
+
+En el despacho, la lista se llama SDS y muestra lo que envías junto a lo que recibes. El registro distingue enviado, entregado y rechazado según el acuse del walkie.
+
+## v0.6.20 — Tras reiniciar la radio, el grupo sigue confirmado
+
+Si la lista de grupos no cabe en un mensaje, la estación confirma los grupos que ya aceptó en el registro y pide el resto en trozos. El walkie no se queda sin oír el grupo en el que estaba, y no hace falta cambiar de grupo y volver.
+
+La ayuda de la recuperación aclara que el registro vive en el servicio de radio. Reiniciar solo ese servicio lo vacía aunque el panel y el enlace sigan. La casilla proactiva sigue apagada. La reactiva, encendida, pide el registro cuando el walkie transmite.
+
+## v0.6.19 — Cada enlace enseña su MAC
+
+En Red, cada tarjeta de interfaz muestra la dirección MAC debajo del nombre y antes del estado.
+
+## v0.6.18 — En el móvil, Inicio vuelve a ocupar la tarjeta
+
+En Inicio, los perfiles rápidos y los botones Aplicar y Más ajustes ocupan otra vez todo el ancho de la tarjeta. Ya no se quedan en una columna estrecha a la izquierda.
+
+## v0.6.17 — El texto llega limpio y la segunda portadora no se confunde
+
+Un SDS de texto del panel, de DAPNET o de una alarma ya no muestra un recuadro al principio. En una celda de dos portadoras, la primera deja de salir deformada. Un acceso que se cuela en la segunda sin llamada ya no se contesta, y el terminal no se registra en bucle; si ese intervalo tiene una llamada, la señalización sigue. Si Brew rechaza una orden, el registro enseña el motivo y no solo el tamaño.
+
+## v0.6.16 — Sin centralita en la celda
+
+La celda ya no lleva centralita SIP ni avisos a teléfonos Snom. La voz y la señalización salen solo por Brew o por PTCP.
+
+## v0.6.15 — La celda informa al núcleo
+
+Cada 15 segundos, y al momento si cambia el aire, el cumplimiento o una alarma, la estación manda por PTCP cómo está: si es conforme y por qué, la radio, cuántas radios y llamadas hay, la salud, las IP y la temperatura.
+
+## v0.6.14 — El núcleo se ve, y se puede volver a aprovisionar
+
+La tarjeta del núcleo deja de ser tres líneas. Enseña señalización, SDS, voz y si la celda está conforme con la ficha. Aprovisionar vuelve a escribir esa ficha; el enlace lo comprueba solo cada medio minuto. El icono de PTMS ya no es el de Red.
+
+## v0.6.13 — Con el núcleo, Inicio enseña el enlace
+
+Si la celda la lleva el PTMS, la tarjeta de perfiles de Inicio pasa a mostrar el núcleo, el estado y si la ficha está al día. DGNA, las integraciones, el despacho y Configuración quedan en una página en blanco con el aviso en el centro. La franja azul desaparece.
+
+## v0.6.12 — La BS vuelve al salir de la suspensión
+
+Al iniciar, el aire y Brew ya se veían, pero la conexión de la BS se quedaba apagada hasta recargar. El panel no se había ido: solo faltaba encender otra vez esa lámpara.
+
+## v0.6.11 — Iniciar no reinicia el panel
+
+Suspender para el aire y el panel sigue. Iniciar arranca otra vez esa unidad, sin la pantalla de «Reiniciando…». Si esa pantalla se abre y el panel no se va, se cierra sola.
+
+## v0.6.10 — U-Status vuelve a su sitio
+
+En Sistema, el control remoto queda debajo del acceso al panel y la copia de seguridad al final. La tarjeta recupera la fila de código, acción y quitar, también en el móvil. Desaparece la lista vieja de perfiles de config: los perfiles de verdad siguen en Configuración. Un cambio en caliente que no entra en el aire deja rastro en el registro, y expulsar ya no puede trabarse con el candado de la lista.
+
+## v0.6.9 — Expulsar llega a la celda
+
+La orden de expulsar solo estaba enchufada con el núcleo PTCP. Con Brew, con el despacho o en solitario se perdía, y la lista blanca en caliente tampoco podía echar al que ya estaba registrado. Ahora la celda la recibe siempre y manda al terminal a registrarse otra vez.
+
+## v0.6.8 — Los cambios en caliente llegan al aire
+
+La lista blanca se aplica en el aire y echa a los ISSI que ya no caben. La ficha de acceso lee esa misma lista. El tope de registros sigue al cambio sin reiniciar. PPM, ganancias y antenas reciclan el aire, porque el SDR solo las lee al abrirse.
+
+## v0.6.7 — El estado del aire vive en la barra
+
+El aviso «RF apagada: el aire se está refrescando» desaparece. El estado del aire queda en la fila donde antes ponía SDR, y en ningún otro sitio. Aplicar confirma con «Aplicado, en el aire.» bajo la barra, sin el texto verde de los perfiles. El config.toml en bruto se guarda y se aplica con un solo botón.
+
+## v0.6.6 — La consola LST vuelve, y Aplicar avisa
+
+La consola LST del panel habla con la consola del aire. Con el perfil Despacho LST seleccionado vuelve a abrirse. La franja de «Sola, en el aire» desaparece. Aplicar deja el botón en «Aplicando…» con el círculo de espera y, al terminar, un aviso en la esquina superior derecha: verde si entró, rojo si no.
+
+## v0.6.5 — Conexión, portadora bajo demanda y celda gestionada
+
+Cerrar la página ya no pinta el enlace como caído. La tarjeta se llama Conexión y, debajo, dice si el protocolo es Brew o PTCP. La franja deja de repetir la portadora extra y la identidad. Reiniciar y actualizar recargan la página cuando vuelve el panel. Dentro de doble portadora, «Solo cuando hay uso» enciende la extra con la llamada y la apaga al quedar libre. Con la celda en PTMS no se editan DGNA, las integraciones, el despacho ni Configuración. U-Status pasa a Sistema y sigue disponible. La difusión de SDS en vivo pasa a Configuración.
+
+## v0.6.4 — La ficha, el punto y el registro coinciden
+
+El punto del perfil aplicado se actualiza al pulsar Aplicar, sin recargar la página. La ficha de Brew sigue la misma foto que la franja: si el enlace está arriba, no dice «sin conexión». El registro en vivo vuelve a mostrar las líneas del aire.
+
+## v0.6.3 — El panel sigue al aire
+
+Reciclar la radio ya no deja el panel en «en espera». Ese aviso solo sale si paras la radio desde el panel. La franja, el aviso de RF y la pastilla de la izquierda muestran lo que está radiando: si Brew está arriba se ve, y si no está configurado Salud no dice que el enlace está conectado. Al caer el aire se borra el espectro y las radios de la sesión anterior; al volver, el MCCH y el resto salen de la misma foto.
+
+## v0.6.2 — Aplicar muestra los parámetros
+
+Aplicar ya no se queda en «el aire no lo confirma». En cuanto la estación acepta el cambio, la ficha muestra MCC, MNC, portadora, frecuencias, vecinas y lista de acceso. La franja de arriba enseña la identidad que está radiando. El aviso de que el aire se recicla se apaga cuando la radio vuelve a responder.
+
+## v0.6.1 — Aplicar no cierra el panel
+
+Aplicar deja de reiniciar las cuatro unidades. La página sigue. Vecinas, identidad, lista blanca y el resto entran en el aire. Un cambio de SDR, de tasa, de portadora, de dúplex o de Brew recicla solo el aire.
+
+PTMS se aplica en el enlace, no en el panel. El formulario muestra la sesión de ese enlace. Reiniciar, en Sistema, sigue siendo el que para las cuatro unidades. Cambiar el puerto del panel recarga la página; la radio sigue.
+
+## v0.6.0 — La estación ya no es un solo proceso
+
+El panel, el enlace con PTMS, la sincronización y el aire son cuatro unidades. Si la radio cae, el panel y la sesión siguen. Si caen ellos, la celda sigue con el último ajuste aplicado.
+
+La sincronización es la única que escribe la configuración. Un documento que no arrancaría no sustituye al que está emitiendo. Vecinas, lista blanca, identidad y la portadora de más (si está en modo bajo demanda) entran sin reiniciar la estación. Un cambio de SDR, de tasa de muestreo o de portadora principal recicla solo el aire.
+
+Con PTMS enganchado, el registro, la llamada, la voz, el SDS y el aviso de cambio de celda llegan al aire. Sin PTMS, la celda sigue sola o por Brew. El panel muestra el modo de la celda y las alarmas activas, y no da un cambio por hecho hasta que el aire lo confirma.
+
+Reiniciar desde el panel recicla las cuatro unidades. Parar en suave deja el panel y detiene el aire. El micrófono de la consola local sigue en el aire: el PTT de esa página del panel todavía no cruza al proceso de la radio.
+
+## v0.5.13 — La ficha ya no deja la estación sin panel
+
+Guardar las vecinas del núcleo encima de la lista que ya tenía la estación producía un TOML que no arrancaba. Sin ese fichero no salen el panel ni la radio. Esa escritura ya no se hace si el resultado no vuelve a parsear.
+
+Si el fichero principal quedó inválido y existe la copia anterior (`config.toml.ptms.bak`), el arranque la restaura y sigue.
+
+## v0.5.12 — La celda unida no vuelve a administración local
+
+Al quedar unida, la estación recuerda que el núcleo administra la identidad, las vecinas y la lista blanca. Eso se ve en el panel y no se edita. Una caída del enlace, un rechazo momentáneo o un reinicio no devuelve esa config a la Pi. Se suelta al apagar PTMS en la propia estación.
+
+Ethernet, el SDR, la pila del reloj, la cuenta del panel y la actualización siguen editándose aquí. Guardar la gestión remota sin que el núcleo conteste no administra la celda.
+
+Al aplicar la ficha, la estación se la confirma al núcleo. Si no coincide, el panel de PTMS la marca no conforme.
+
+## v0.5.11 — La ficha del núcleo sale al aire
+
+Con la sesión PTCP unida, la estación anuncia la ficha que manda el núcleo: identidad, vecinas y lista blanca. Las vecinas salen en el siguiente `D-NWRK-BROADCAST`, con salto no anunciado, igual que las celdas vecinas aisladas. La lista blanca entra al momento; vacía sigue siendo red abierta.
+
+Si el MCC, el MNC, el área, el colour code o la portadora no coinciden con lo que ya está en el aire, la estación guarda la ficha y se reinicia para anunciarla. Con dos portadoras activas no se retoca el sintonizador.
+
+## v0.5.10 — PTMS en el panel
+
+En Sistema, debajo de Red, está PTMS. Desde ahí se indica el núcleo, el puerto, el nombre de celda y la credencial. Al guardar, la estación abre la sesión PTCP sin reiniciar. La ficha se muestra en la misma página.
+
+## v0.5.9 — Gestión remota
+
+La estación puede unirse a un núcleo PTMS. En el panel está en Sistema → Gestión remota. En la config es `[gestion_remota]`: activado, host, puerto, nombre de celda y credencial. No entra en los perfiles TMO Cell ni en los de Brew.
+
+Con la gestión remota encendida, el enlace con el núcleo es solo PTCP y el perfil Brew no se usa para ese enlace. La estación manda su nombre y su credencial, recibe la ficha (identidad, vecinas y lista blanca) y la enseña. Esa ficha todavía no se aplica a la celda ni se anuncia en el aire. Si la gestión remota está apagada, la estación sigue como hasta ahora.
+
+## v0.5.8 — Carga de la pila RTC
+
+En una Pi 5, Sensores del sistema puede encender o apagar la carga de la pila del reloj. Hay que elegir la pila: ML-2020 a 3,0 V o LIR2032 a 4,2 V. Sin pila detectada, la carga no se enciende. El ajuste se guarda y entra al reiniciar la Pi.
+
+## v0.5.7 — Perfil nuevo
+
+Al añadir un perfil TMO Cell o Brew, el formulario sale vacío. Los números en gris son un ejemplo, no un valor. «Copiar de Vivo» sigue trayendo la config en vivo, y hay que guardar para conservarlo.
+
+## v0.5.6 — Asistente
+
+La bienvenida, la comprobación de internet, SoapySDR, la elección de placa, el arranque automático y el cierre explican el paso con menos jerga.
+
+«Valores de fábrica» pasa a ser «Configuración inicial». Se puede omitir, o introducir MCC, MNC, área, portadora y Brew. Eso se guarda en la config en vivo, no en un perfil.
+
+En un perfil TMO Cell o Brew, «Copiar de Vivo» rellena el formulario con lo que ese perfil admite de la config en vivo. Hay que guardar para conservarlo. Al editar, pide confirmación antes de pisar lo que ya hay.
+
+Añadir un perfil abre el formulario con valores de partida y el nombre vacío. No reutiliza el perfil elegido. Si ese nombre ya existe, no lo sobrescribe.
+
 ## v0.5.5 — µCell en el asistente
 
 La placa [µCell BB](https://store.fredcorp.cc/shop/%CE%BCcell-bb-2) usa el driver `mucell`, no el del SXceiver. Si el escaneo no ve ninguna radio, el asistente ofrece SXceiver, Lime y µCell. Elegir una tarjeta ya no recarga el paso.
