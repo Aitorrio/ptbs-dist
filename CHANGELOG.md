@@ -2,9 +2,49 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
-## v0.6.30 — La página PTMS cabe en la pantalla
+## v0.6.30 — El núcleo lleva la celda
 
-El formulario de PTMS ya no se estira hasta el borde. En el ordenador las tarjetas usan el ancho de la página y los campos quedan con margen. En el móvil cada campo ocupa su línea y el texto no se sale de la pantalla.
+Desde 0.5.5 la estación pasa a cuatro unidades, el núcleo PTMS administra la celda y el SDS dice si el walkie lo recibió. Esto es el resultado. Las notas de más abajo cuentan cada corte.
+
+La estación son cuatro unidades: el panel, el enlace con el núcleo, la sincronización y el aire. Si la radio cae, el panel sigue. Aplicar ya no reinicia las cuatro ni cierra la página.
+
+- Vecinas, identidad, lista blanca y la portadora extra, cuando está en «Solo cuando hay uso», entran sin tirar la estación.
+- Un cambio de SDR, de tasa, de portadora principal, de dúplex, de Brew, de PPM, de ganancias o de antenas recicla solo el aire.
+- Reiniciar, en Sistema, para las cuatro. Parar en suave deja el panel y detiene el aire. Iniciar levanta otra vez el aire, sin la pantalla de «Reiniciando…».
+- Una configuración que no arrancaría no sustituye a la que está emitiendo. Si el fichero quedó inválido y existe la copia anterior, el arranque la restaura.
+
+El núcleo administra la identidad, las vecinas y la lista blanca, y la estación las anuncia en el aire.
+
+- En PTMS se indican el host, el puerto, el nombre de celda y la credencial. Al guardar se abre la sesión sin reiniciar el panel.
+- Si el MCC, el MNC, el área, el colour code o la portadora no coinciden con lo que ya está en el aire, guarda la ficha y se reinicia para anunciarla. Con dos portadoras no se retoca el sintonizador.
+- Mientras está unida no se editan DGNA, las integraciones, el despacho ni Configuración. U-Status sigue en Sistema. Ethernet, el SDR, la pila del reloj, la cuenta del panel y la actualización se siguen editando aquí.
+- Se suelta al apagar PTMS en la propia estación. Una caída del enlace, un rechazo o un reinicio no devuelven esa administración a la Pi.
+- Inicio enseña el núcleo, el estado y si la ficha está al día. La página de PTMS muestra señalización, SDS, voz y si la celda es conforme. Aprovisionar vuelve a escribir la ficha.
+- Cada 15 segundos, y al momento si cambia el aire, el cumplimiento o una alarma, la estación informa al núcleo.
+- En el ordenador esa página usa el ancho de la pantalla y los campos quedan con margen. En el móvil cada campo va en su línea.
+
+La voz ya no pasa por centralita. No hay SIP ni teléfonos Snom: sale por Brew o por PTCP.
+
+- La consola LST del panel vuelve a hablar con la del aire cuando el perfil Despacho LST está seleccionado.
+- «Solo cuando hay uso» enciende la portadora extra con la llamada y la apaga al quedar libre.
+- Si la lista de grupos no cabe en un mensaje, la estación confirma los grupos ya aceptados y pide el resto. El walkie sigue oyendo el grupo en el que estaba después de reiniciar la radio.
+- La recuperación proactiva sigue apagada. La reactiva, encendida, pide el registro cuando el walkie transmite.
+
+El SDS espera al walkie y el registro dice en qué quedó.
+
+- Al enviarlo desde el panel o el despacho, la fila aparece al momento. Sale cuando el walkie vuelve al canal de control, también con el grupo en llamada. Al grupo le llega una copia a cada radio afiliada.
+- El estado puede ser enviado, entregado, leído, inalcanzable o rechazado. Entregado es que lo recibió. Leído, que lo abrió. Un acuse posterior no quita el leído. Inalcanzable es que el ISSI no está registrado, el grupo no tiene nadie, o el walkie no volvió al canal a tiempo. Rechazado es que estaba y lo rechazó.
+- Un SDS a un ISSI que estuvo en esta celda dentro de las horas de retención se guarda y sale cuando vuelve a registrarse, en la trama en la que está escuchando. Si nunca estuvo, o ese tiempo ya pasó, queda inalcanzable. Esas horas son la vida del mensaje y la ventana de «estuvo aquí». El grupo no se guarda. Con PTMS unido, la celda no retiene.
+- De walkie a walkie, si el destino no está en la celda, se entrega a Brew. Si Brew confirma la entrega, queda entregado o leído y no se guarda. Si no confirma en medio minuto, o confirma que no se entregó, se retiene cuando ese ISSI sigue dentro de las horas. Si no, queda inalcanzable.
+- El mapa de ubicación muestra las posiciones LIP que el registro recibe.
+
+Otras diferencias al pasar de 0.5.5.
+
+- La tarjeta se llama Conexión y dice si el protocolo es Brew o PTCP. El estado del aire está en la barra. Aplicar confirma con «Aplicado, en el aire.»
+- En Red, cada interfaz muestra su MAC. Expulsar llega a la celda también con Brew, con el despacho o en solitario. La lista blanca en caliente echa a los ISSI que ya no caben.
+- Un SDS de texto del panel, de DAPNET o de una alarma ya no muestra un recuadro al principio. En dos portadoras, un acceso que se cuela en la segunda sin llamada no se contesta. Si Brew rechaza una orden, el registro enseña el motivo.
+- Un perfil nuevo sale vacío. «Configuración inicial» se puede omitir. En una Pi 5, Sensores del sistema puede cargar la pila del reloj, ML-2020 o LIR2032.
+- En el móvil, los perfiles rápidos de Inicio ocupan otra vez todo el ancho de la tarjeta.
 
 ## v0.6.28 — El registro sigue el acuse de Brew
 
