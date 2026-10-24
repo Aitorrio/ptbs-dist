@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.27 — El SDS entre walkies y el mapa LIP
+
+Un SDS de un walkie a otro, si el destino no está en la celda, se entrega a Brew y queda enviado. Si Brew no lo acepta y ese ISSI estuvo aquí dentro de las horas de retención, se guarda hasta que vuelva. Si nunca estuvo, o ese tiempo ya pasó, queda inalcanzable. Esas horas son también la ventana en la que el ISSI cuenta como visto. La casilla nueva guarda además una copia cuando Brew acepta y no confirma. El mapa de ubicación vuelve a mostrar las posiciones LIP que el registro ya recibe.
+
 ## v0.6.26 — El SDS retenido sale cuando el walkie ya escucha
 
 Un SDS guardado espera a que el walkie termine de registrarse y sale en la trama en la que está escuchando. El registro pasa a enviado en ese momento. Un silencio del enlace entre el panel y la radio ya no se toma por una desconexión.
