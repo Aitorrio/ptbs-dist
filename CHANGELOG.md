@@ -2,6 +2,12 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.35 — La ficha de inicio usa la frecuencia que está en el aire
+
+La portadora, el MCC y el MNC ya salían del aire. La frecuencia de transmisión, la de recepción y el dúplex seguían siendo los del arranque del panel. Ahora las tres salen de la portadora que está radiando.
+
+Al deshabilitar PTMS se vuelven a aplicar el perfil de celda y el de Brew que estaban activos, y la radio arranca de nuevo con ellos.
+
 ## v0.6.34 — La celda se entera si el núcleo se calla
 
 Si PTMS deja de contestar, la sesión cae en unos quince segundos: el aire anuncia site trunking y Salud marca el backhaul PTCP caído. Aprovisionar dice si ha escrito la ficha, si ya no hay sesión o si no ha podido.
