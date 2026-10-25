@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.33 — El aire se entera de que el núcleo está unido
+
+El enlace repite al aire, cada dos segundos, si la sesión con PTMS sigue abierta. Con eso el SYSINFO anuncia red y Salud deja de marcar el backhaul PTCP como caído. Brew sigue usando su propio bit cuando la celda va sola.
+
 ## v0.6.32 — Con el núcleo unido, la celda no anuncia site trunking
 
 Si la sesión con PTMS está abierta, el aire anuncia servicios de red y Salud muestra el backhaul PTCP en orden. Si el enlace cae, entonces sí es site trunking. Un Brew que quede en el fichero no manda mientras la celda esté en el núcleo.
