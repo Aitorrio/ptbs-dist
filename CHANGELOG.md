@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.36 — La credencial de PTMS se queda en el campo
+
+Al apagar el núcleo, la credencial sigue en el fichero. En la pestaña se ve enmascarada, como la contraseña de Brew: déjala así para no cambiarla. La página avisa de que guardar apagado devuelve la radio a los perfiles activos.
+
 ## v0.6.35 — La ficha de inicio usa la frecuencia que está en el aire
 
 La portadora, el MCC y el MNC ya salían del aire. La frecuencia de transmisión, la de recepción y el dúplex seguían siendo los del arranque del panel. Ahora las tres salen de la portadora que está radiando.
