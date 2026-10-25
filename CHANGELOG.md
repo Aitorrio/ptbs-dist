@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.31 — La celda cuenta al núcleo lo que ocurre en su aire
+
+Un walkie que se registra, un PTT de grupo y un SDS a un ISSI de otra celda salen hacia el núcleo por la sesión que ya está abierta. Al unirse, la celda informa de los ISSI que ya tiene.
+
 ## v0.6.30 — El núcleo lleva la celda
 
 Desde 0.5.5 la estación pasa a cuatro unidades, el núcleo PTMS administra la celda y el SDS dice si el walkie lo recibió. Esto es el resultado. Las notas de más abajo cuentan cada corte.
