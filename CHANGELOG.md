@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.34 — La celda se entera si el núcleo se calla
+
+Si PTMS deja de contestar, la sesión cae en unos quince segundos: el aire anuncia site trunking y Salud marca el backhaul PTCP caído. Aprovisionar dice si ha escrito la ficha, si ya no hay sesión o si no ha podido.
+
 ## v0.6.33 — El aire se entera de que el núcleo está unido
 
 El enlace repite al aire, cada dos segundos, si la sesión con PTMS sigue abierta. Con eso el SYSINFO anuncia red y Salud deja de marcar el backhaul PTCP como caído. Brew sigue usando su propio bit cuando la celda va sola.
