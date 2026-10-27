@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.38 — Con PTMS, el tráfico va al núcleo
+
+Con el núcleo unido, el grupo (señal y audio), el SDS y el LIP suben a PTMS, también si el destino es de esta celda. La privada same-cell solo se señaliza; el audio se queda en la BTS. Los rangos locales heredados ya no retienen ese tráfico. Sin PTMS, Brew y la celda autónoma siguen como antes.
+
 ## v0.6.37 — El plan del núcleo entra en la estación
 
 PTMS manda el plan de la celda (banda, dúplex, temporizadores, zona horaria y rangos locales). La estación lo guarda en el fichero junto con la ficha. Si un dato no viene, se queda el de la estación. El aire se confirma igual, con la identidad, las vecinas y la lista blanca.
