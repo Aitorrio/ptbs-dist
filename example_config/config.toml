@@ -216,6 +216,13 @@ voice_service = true
 # 0 = disabled — registrations never expire.
 # Default: 3600 (1 hour). Valid range when non-zero: 60–86400.
 # periodic_registration_secs = 3600
+#
+# Idle-radio presence checks (independent of T351). After this many seconds with no
+# registration or decoded uplink, the cell challenges with D-LOCATION-UPDATE-COMMAND.
+# 0 = disabled. Default: 30. Non-zero range: 5–3600. See Docs/radio-presence.md.
+# presence_check_secs = 30
+# Grace after MAC confirms the presence COMMAND was transmitted. Default: 30 (10–300).
+# presence_response_secs = 30
 
 # ─────────────────────────────────────────────────────────────────────────────
 # OPTIONAL: additional cell service flags (advertised in the SYSINFO broadcast).

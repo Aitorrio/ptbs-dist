@@ -2,6 +2,10 @@
 
 Notas para operadores. El dashboard OTA muestra las secciones posteriores a tu versión actual.
 
+## v0.6.39 — La celda comprueba si el walkie sigue ahí
+
+Si un walkie se calla sin desregistrarse, la celda lo reta con un comando de actualización de ubicación. Si no responde, deja de anunciarlo como alcanzable y avisa al núcleo (PTMS) con un desregistro; conserva identidad y grupos por si vuelve. Los temporizadores de presencia se editan en la red junto al T351 (por defecto 30 s de espera y 30 s de respuesta; 0 apaga el check).
+
 ## v0.6.38 — Con PTMS, el tráfico va al núcleo
 
 Con el núcleo unido, el grupo (señal y audio), el SDS y el LIP suben a PTMS, también si el destino es de esta celda. La privada same-cell solo se señaliza; el audio se queda en la BTS. Los rangos locales heredados ya no retienen ese tráfico. Sin PTMS, Brew y la celda autónoma siguen como antes.
